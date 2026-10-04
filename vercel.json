@@ -13,10 +13,6 @@
       "destination": "/css/:path*"
     },
     {
-      "source": "/_next/static/fonts/:path*",
-      "destination": "/fonts/:path*"
-    },
-    {
       "source": "/_next/static/media/:path*",
       "destination": "/fonts/:path*"
     }
