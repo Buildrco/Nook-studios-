@@ -140,6 +140,39 @@
 #component-dialog .install-intro h3{font-size:22px;font-weight:600}
 #component-dialog .detail-resource-links{display:none!important}
 @media(max-width:760px){#component-dialog .detail-preview-surface iframe{height:62vh;min-height:440px}.library-page .component-info h3{font-size:19px!important}.library-page .component-description{font-size:16px!important}.library-page .component-actions .library-button{flex:1 1 auto}}
+
+/* Full-page live component workspace: preview first, source below. */
+.component-dialog{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;overflow:auto;border:0;border-radius:0;background:#fff;color:var(--ink);box-shadow:none;overscroll-behavior:contain}
+.component-dialog::backdrop{background:#fff;backdrop-filter:none}
+.detail-shell{width:100%;max-width:none;min-height:100%;max-height:none;display:block}
+.detail-header{position:sticky;top:0;z-index:10;align-items:center;padding:14px clamp(18px,4vw,64px);background:rgba(255,255,255,.97);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+.detail-header h2{font-size:26px!important;font-weight:600}
+.detail-header p{font-size:15px!important;line-height:1.45!important}
+.detail-panel{width:100%;min-height:0;overflow:visible;padding:22px clamp(18px,4vw,64px) 30px}
+.preview-panel{padding-top:22px}
+.detail-preview-toolbar{font-size:16px!important;font-weight:600!important;margin-bottom:14px}
+.detail-preview-toolbar span:last-child{font-size:14px;font-weight:500;color:#53616c}
+.detail-preview-surface{width:100%;min-height:78vh;overflow:hidden;border:0;border-radius:0;background:#fff}
+.detail-preview-surface iframe{display:block;width:100%;height:min(82vh,980px);min-height:640px;border:0;background:#fff}
+.detail-loading{font-size:16px!important;font-weight:500!important;padding:48px 20px!important}
+.preview-attribution{font-size:14px!important;font-weight:500!important;color:#53616c!important;margin-top:12px}
+.code-panel,.use-panel{border-top:1px solid var(--line);scroll-margin-top:88px}
+.detail-section-heading{margin-bottom:18px}
+.detail-section-heading .eyebrow{margin:0 0 6px;color:var(--blue);font-size:12px;font-weight:700;letter-spacing:.08em}
+.detail-section-heading h3{margin:0;font-size:24px;font-weight:600}
+.detail-section-heading>p:last-child{margin:6px 0 0;color:#53616c;font-size:15px!important;font-weight:500!important}
+.code-toolbar{margin:14px 0 10px}
+.code-file-select{font-size:14px!important}
+.code-file-select select{font-size:14px!important}
+.code-message{font-size:14px!important;font-weight:500!important}
+.source-code{max-height:none;min-height:240px;font-size:14px!important;line-height:1.65!important;border-radius:12px}
+.install-intro{max-width:900px}
+.install-intro h3{font-size:24px!important}
+.install-intro>p:last-child,.dependency-block p{font-size:15px!important;font-weight:500!important;line-height:1.5!important}
+.install-command{max-width:1100px}
+.install-command code{font-size:14px}
+.dependency-block h4{font-size:17px!important}
+@media(max-width:760px){.detail-header{padding:12px 16px}.detail-header h2{font-size:21px!important}.detail-header p{font-size:14px!important}.detail-panel{padding:16px 14px 24px}.detail-preview-toolbar{align-items:flex-start;flex-direction:column;gap:5px}.detail-preview-surface{min-height:70vh}.detail-preview-surface iframe{height:74vh;min-height:520px}.detail-section-heading h3{font-size:21px}.source-code{font-size:13px!important;padding:14px}.install-command{align-items:flex-start;flex-direction:column}.install-command code{max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere}}
 </style></head><body><header class="site-header"><div class="nav-shell"><a class="brand" href="/" aria-label="Buildr Co home"><img src="/logo.svg" alt="" width="131" height="43"><span>Buildr Co</span></a><nav class="desktop-nav" aria-label="Main navigation"><a href="/our-work/">Our Work</a><a href="/about/">About Us</a><a href="/shop/">Shop</a><a href="/code-library/" class="active" aria-current="page">Code Library</a><a href="/#contact">Contact Us</a></nav><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-navigation"><span></span><span></span></button></div><nav class="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation" aria-hidden="true"><a href="/our-work/">Our Work</a><a href="/about/">About Us</a><a href="/shop/">Shop</a><a href="/code-library/" class="active" aria-current="page">Code Library</a><a href="/#contact">Contact Us</a></nav></header><main class="page-shell library-page">
 <section class="library-intro reveal">
 <p class="eyebrow">CODE LIBRARY</p>
@@ -170,9 +203,9 @@
 <span class="search-hint" aria-hidden="true">⌕</span>
 </label>
 </div>
-<p class="library-status" id="library-status" role="status" aria-live="polite">Loading the live Watermelon UI catalog…</p>
+<p class="library-status" id="library-status" role="status" aria-live="polite">Loading the live component library…</p>
 <div class="component-grid" id="component-grid" aria-live="polite"></div>
-<p class="library-footnote">Catalog data and install commands come from Watermelon UI. Results are loaded dynamically; search to discover more.</p>
+<p class="library-footnote">Browse interactive examples, inspect source code, and copy or install the components you need.</p>
 </div>
 </section>
 <dialog class="component-dialog" id="component-dialog" aria-labelledby="detail-title">
@@ -181,26 +214,21 @@
 <div class="detail-heading"><div class="detail-kickers"><span id="detail-category" class="detail-category"></span><span id="detail-kind" class="detail-kind"></span></div><h2 id="detail-title"></h2><p id="detail-description"></p></div>
 <button class="dialog-close" type="button" aria-label="Close component details">×</button>
 </header>
-<nav class="detail-tabs" role="tablist" aria-label="Component details">
-<button type="button" role="tab" class="detail-tab is-active" data-detail-tab="preview" aria-selected="true">Preview</button>
-<button type="button" role="tab" class="detail-tab" data-detail-tab="code" aria-selected="false">View / Copy Code</button>
-<button type="button" role="tab" class="detail-tab" data-detail-tab="use" aria-selected="false">Install / Use</button>
-</nav>
-<section class="detail-panel preview-panel" data-detail-panel="preview" role="tabpanel">
-<div class="detail-preview-toolbar"><span>Live interactive preview</span><span>Preview here before copying or installing</span></div>
-<div class="detail-preview-surface" id="detail-preview-surface"><p class="detail-loading">Choose a component to load its live preview.</p></div>
-<p class="preview-attribution">The preview stays on this page. Use the code tab to inspect or copy the source before installing.</p>
+<section class="detail-panel preview-panel" id="preview-section" data-detail-panel="preview">
+<div class="detail-preview-toolbar"><span>Live examples</span><span>Use the examples here, then scroll for this component’s code</span></div>
+<div class="detail-preview-surface" id="detail-preview-surface"><p class="detail-loading">Choose a component to load its live examples.</p></div>
+<p class="preview-attribution">The examples are interactive. The selected component’s source is below.</p>
 </section>
-<section class="detail-panel code-panel" data-detail-panel="code" role="tabpanel" hidden>
+<section class="detail-panel code-panel" id="code-section" data-detail-panel="code">
+<div class="detail-section-heading"><p class="eyebrow">COMPONENT SOURCE</p><h3>Inspect or copy the code</h3><p>The selected component’s source loads automatically when this view opens.</p></div>
 <div class="code-toolbar"><label class="code-file-select" id="code-file-wrap" hidden>Source file <select id="code-file-select" aria-label="Choose source file"></select></label><button class="library-button library-button-primary" id="copy-code-button" type="button" disabled>Copy Code</button></div>
-<p class="code-message" id="code-message" role="status">Source loads when you open the code tab.</p>
+<p class="code-message" id="code-message" role="status">Loading component source…</p>
 <pre class="source-code"><code id="source-code">Loading source…</code></pre>
 </section>
-<section class="detail-panel use-panel" data-detail-panel="use" role="tabpanel" hidden>
-<div class="install-intro"><p class="eyebrow">INSTALL</p><h3>Bring it into your project</h3><p>Run the registry command in your project terminal. The component stays editable in your codebase.</p></div>
+<section class="detail-panel use-panel" id="use-section" data-detail-panel="use">
+<div class="install-intro"><p class="eyebrow">INSTALL</p><h3>Bring it into your project</h3><p>Copy the install command into your project terminal. The component stays editable in your codebase.</p></div>
 <div class="install-command"><code id="install-command"></code><button class="library-button library-button-primary" id="copy-install-button" type="button">Copy command</button></div>
 <div class="dependency-block"><h4>Dependencies</h4><p id="dependency-list">No additional dependencies listed.</p></div>
-
 </section>
 </div>
 </dialog>
@@ -243,11 +271,11 @@
   function safeExternalUrl(value,host){try{var url=new URL(value);return url.protocol==="https:"&&url.hostname===host?url.href:"";}catch(error){return "";}}
   async function getJson(url,signal){var response=await fetch(url,{method:"GET",headers:{Accept:"application/json"},signal:signal,credentials:"omit"});if(!response.ok)throw new Error("Request failed ("+response.status+")");return response.json();}
   function buildListUrl(kind,query,category){var params=new URLSearchParams({kind:kind,limit:"50"});if(query)params.set("query",query);if(category)params.set("category",category);return API+"?"+params.toString();}
-  async function loadSummary(){try{var data=await getJson(SUMMARY);state.summary=data;var counts=data.counts||{};var componentTotal=(Number(counts.components)||0)+(Number(counts["animated-components"])||0);total.textContent=componentTotal?componentTotal.toLocaleString()+" components in catalog":"Live component catalog";}catch(error){total.textContent="Live Watermelon catalog";}}
+  async function loadSummary(){try{var data=await getJson(SUMMARY);state.summary=data;var counts=data.counts||{};var componentTotal=(Number(counts.components)||0)+(Number(counts["animated-components"])||0);total.textContent=componentTotal?componentTotal.toLocaleString()+" components in catalog":"Live component catalog";}catch(error){total.textContent="Live component library";}}
   function updateCategoryNav(){var existing=categoryList.querySelectorAll(".category-filter:not([data-category=''])");existing.forEach(function(button){button.remove();});var names=Array.from(state.categories).sort(function(a,b){return a.localeCompare(b);});names.forEach(function(name){var button=document.createElement("button");button.type="button";button.className="category-filter";button.dataset.category=name;button.setAttribute("aria-pressed","false");var label=document.createElement("span");label.textContent=titleCase(name);var count=document.createElement("span");count.className="category-count";count.textContent="";button.appendChild(label);button.appendChild(count);categoryList.appendChild(button);});allCount.textContent=String(state.items.size||"—");categoryList.querySelectorAll(".category-filter").forEach(function(button){var active=button.dataset.category===state.category;button.classList.toggle("is-active",active);button.setAttribute("aria-pressed",String(active));});}
   function makePlaceholder(item){var wrap=document.createElement("div");wrap.className="component-placeholder";var mark=document.createElement("span");mark.className="component-placeholder-mark";mark.setAttribute("aria-hidden","true");mark.textContent=(item.title||"UI").trim().charAt(0).toUpperCase()||"U";var copy=document.createElement("span");copy.className="component-placeholder-copy";var title=document.createElement("strong");title.textContent=item.title||"Component";var category=document.createElement("span");category.textContent=titleCase(item.category);copy.appendChild(title);copy.appendChild(category);wrap.appendChild(mark);wrap.appendChild(copy);return wrap;}
   function addAction(container,label,item,tab,primary){var button=document.createElement("button");button.type="button";button.className="library-button"+(primary?" library-button-primary":"");button.dataset.openComponent=keyFor(item);button.dataset.openTab=tab;button.textContent=label;container.appendChild(button);}
-  function createCard(item){var article=document.createElement("article");article.className="component-card";var visual=document.createElement("button");visual.type="button";visual.className="component-visual";visual.dataset.openComponent=keyFor(item);visual.dataset.openTab="preview";visual.setAttribute("aria-label","Preview "+(item.title||"component"));var imageUrl=safeExternalUrl(item.image,"assets.watermelon.sh");if(imageUrl){var image=document.createElement("img");image.src=imageUrl;image.alt="";image.loading="lazy";image.decoding="async";image.addEventListener("error",function(){visual.replaceChildren(makePlaceholder(item));},{once:true});visual.appendChild(image);}else{visual.appendChild(makePlaceholder(item));}var previewLabel=document.createElement("span");previewLabel.className="component-visual-label";previewLabel.textContent="Live preview ↗";visual.appendChild(previewLabel);article.appendChild(visual);var info=document.createElement("div");info.className="component-info";var meta=document.createElement("div");meta.className="component-meta";var category=document.createElement("span");category.className="component-category";category.textContent=titleCase(item.category);var type=document.createElement("span");type.className="component-kind";type.textContent=item.kind==="animated-components"?"Animated":"Component";meta.appendChild(category);meta.appendChild(type);info.appendChild(meta);var heading=document.createElement("h3");heading.textContent=item.title||"Untitled component";info.appendChild(heading);var description=document.createElement("p");description.className="component-description";description.textContent=item.description||"A reusable interface component ready to add to your project.";info.appendChild(description);var actions=document.createElement("div");actions.className="component-actions";addAction(actions,"Live Preview",item,"preview",true);addAction(actions,"View / Copy Code",item,"code",false);addAction(actions,"Install / Use",item,"use",false);info.appendChild(actions);article.appendChild(info);return article;}
+  function createCard(item){var article=document.createElement("article");article.className="component-card";var visual=document.createElement("button");visual.type="button";visual.className="component-visual";visual.dataset.openComponent=keyFor(item);visual.dataset.openTab="preview";visual.setAttribute("aria-label","Preview "+(item.title||"component"));var imageUrl=safeExternalUrl(item.image,"assets.watermelon.sh");if(imageUrl){var image=document.createElement("img");image.src=imageUrl;image.alt="";image.loading="lazy";image.decoding="async";image.addEventListener("error",function(){visual.replaceChildren(makePlaceholder(item));},{once:true});visual.appendChild(image);}else{visual.appendChild(makePlaceholder(item));}var previewLabel=document.createElement("span");previewLabel.className="component-visual-label";previewLabel.textContent="Open live preview";visual.appendChild(previewLabel);article.appendChild(visual);var info=document.createElement("div");info.className="component-info";var meta=document.createElement("div");meta.className="component-meta";var category=document.createElement("span");category.className="component-category";category.textContent=titleCase(item.category);var type=document.createElement("span");type.className="component-kind";type.textContent=item.kind==="animated-components"?"Animated":"Component";meta.appendChild(category);meta.appendChild(type);info.appendChild(meta);var heading=document.createElement("h3");heading.textContent=item.title||"Untitled component";info.appendChild(heading);var description=document.createElement("p");description.className="component-description";description.textContent=item.description||"A reusable interface component ready to add to your project.";info.appendChild(description);var actions=document.createElement("div");actions.className="component-actions";addAction(actions,"Live Preview",item,"preview",true);addAction(actions,"View Code ↓",item,"code",false);addAction(actions,"Install ↓",item,"use",false);info.appendChild(actions);article.appendChild(info);return article;}
   function renderItems(entries){grid.replaceChildren();if(!entries.length){var empty=document.createElement("div");empty.className="library-empty";var heading=document.createElement("strong");heading.textContent="No components found";var copy=document.createElement("p");copy.textContent=state.query?"Try a different search or clear the category filter.":"Try another category or search the live catalog.";empty.appendChild(heading);empty.appendChild(copy);if(state.query||state.category){var clear=document.createElement("button");clear.type="button";clear.className="library-button";clear.textContent="Clear filters";clear.addEventListener("click",function(){state.query="";state.category="";searchInput.value="";loadEntries();});empty.appendChild(clear);}grid.appendChild(empty);return;}entries.forEach(function(item){grid.appendChild(createCard(item));});}
   async function loadEntries(){var requestId=++state.request;if(state.controller)state.controller.abort();state.controller=new AbortController();var signal=state.controller.signal;var kinds=state.kind==="all"?["components","animated-components"]:[state.kind];setStatus("Loading live catalog…",false);grid.setAttribute("aria-busy","true");try{var results=await Promise.all(kinds.map(function(kind){return getJson(buildListUrl(kind,state.query.trim(),state.category),signal).then(function(data){return{kind:kind,entries:Array.isArray(data.entries)?data.entries:[]};});}));if(requestId!==state.request)return;state.items.clear();results.forEach(function(result){result.entries.forEach(function(item){if(!item.kind)item.kind=result.kind;state.items.set(keyFor(item),item);if(item.category)state.categories.add(item.category);});});updateCategoryNav();var entries=Array.from(state.items.values()).sort(function(a,b){return String(a.title||"").localeCompare(String(b.title||""));});renderItems(entries);var filterLabel=state.category?" in "+titleCase(state.category):"";var searchLabel=state.query?" matching “"+state.query+"”":"";setStatus("Showing "+entries.length+" result"+(entries.length===1?"":"s")+filterLabel+searchLabel+". Searches the live component catalog; results are limited to 50 per type.",false);}catch(error){if(error.name==="AbortError"||requestId!==state.request)return;grid.replaceChildren();var empty=document.createElement("div");empty.className="library-empty";var heading=document.createElement("strong");heading.textContent="The live catalog could not be reached";var copy=document.createElement("p");copy.textContent="Check your connection, then retry the live catalog.";var retry=document.createElement("button");retry.type="button";retry.className="library-button library-button-primary";retry.textContent="Retry catalog";retry.addEventListener("click",loadEntries);empty.appendChild(heading);empty.appendChild(copy);empty.appendChild(retry);grid.appendChild(empty);setStatus("Live catalog unavailable. Retry when your connection is ready.",true);}finally{if(requestId===state.request)grid.removeAttribute("aria-busy");}}
   function updateDetailHash(item,tab,push){var params=new URLSearchParams();params.set("component","1");params.set("kind",item.kind);params.set("slug",item.slug);if(tab)params.set("tab",tab);var path=window.location.pathname+window.location.search+"#"+params.toString();if(push)window.history.pushState({component:item.slug},"",path);else window.history.replaceState({component:item.slug},"",path);}
@@ -259,24 +287,39 @@
     if(previewUrl){
       var frame=document.createElement("iframe");
       frame.className="detail-preview-iframe";
-      frame.title="Live interactive examples for "+(item.title||"component");
+      frame.title="Live examples for "+(item.category||item.title||"component");
       frame.src=previewUrl;
       frame.loading="eager";
       frame.referrerPolicy="no-referrer";
-      frame.setAttribute("sandbox","allow-scripts allow-same-origin allow-forms");
+      frame.setAttribute("sandbox","allow-scripts allow-same-origin");
+      frame.addEventListener("error",function(){
+        var message=document.createElement("p");
+        message.className="detail-loading detail-preview-error";
+        message.textContent="Live examples are unavailable right now. The selected component’s source is below.";
+        previewSurface.replaceChildren(message);
+      },{once:true});
       previewSurface.appendChild(frame);
     }else{
-      var empty=makePlaceholder(item);
-      empty.classList.add("detail-preview-placeholder");
-      var message=document.createElement("span");
-      message.className="detail-preview-fallback-copy";
-      message.textContent="A live example is not available. Open the code tab to inspect the source.";
-      empty.appendChild(message);
-      previewSurface.appendChild(empty);
+      var message=document.createElement("p");
+      message.className="detail-loading detail-preview-error";
+      message.textContent="Live examples are unavailable right now. The selected component’s source is below.";
+      previewSurface.appendChild(message);
     }
   }
-  function activateTab(tab){var valid=["preview","code","use"].indexOf(tab)>=0?tab:"preview";dialog.querySelectorAll("[data-detail-tab]").forEach(function(button){var active=button.dataset.detailTab===valid;button.classList.toggle("is-active",active);button.setAttribute("aria-selected",String(active));});dialog.querySelectorAll("[data-detail-panel]").forEach(function(panel){panel.hidden=panel.dataset.detailPanel!==valid;});if(state.current){updateDetailHash(state.current,valid,false);if(valid==="preview")renderPreview(state.current);if(valid==="code")loadRegistryCode(state.current);}}
-  function setCurrentDetail(item,tab,addHistory){state.current=item;document.getElementById("detail-category").textContent=titleCase(item.category);document.getElementById("detail-kind").textContent=item.kind==="animated-components"?"Animated component":"Component";document.getElementById("detail-title").textContent=item.title||"Component";document.getElementById("detail-description").textContent=item.description||"";var command=item.installCommand||("npx shadcn@latest add "+(item.registryUrl||("https://registry.watermelon.sh/r/"+encodeURIComponent(item.slug)+".json")));installCommand.textContent=command;var dependencies=Array.isArray(item.dependencies)?item.dependencies:[];document.getElementById("dependency-list").textContent=dependencies.length?dependencies.join(", "):"No additional dependencies listed.";if(!dialog.open)dialog.showModal();if(addHistory)updateDetailHash(item,tab,true);activateTab(tab);}
+  function activateTab(tab){
+    var valid=["preview","code","use"].indexOf(tab)>=0?tab:"preview";
+    if(!state.current)return;
+    updateDetailHash(state.current,valid,false);
+    renderPreview(state.current);
+    loadRegistryCode(state.current);
+    if(valid==="code"||valid==="use"){
+      var target=document.getElementById(valid==="code"?"code-section":"use-section");
+      window.requestAnimationFrame(function(){target.scrollIntoView({behavior:"smooth",block:"start"});});
+    }else{
+      dialog.scrollTo({top:0,behavior:"smooth"});
+    }
+  }
+  function setCurrentDetail(item,tab,addHistory){state.current=item;document.getElementById("detail-category").textContent=titleCase(item.category);document.getElementById("detail-kind").textContent=item.kind==="animated-components"?"Animated component":"Component";document.getElementById("detail-title").textContent=item.title||"Component";document.getElementById("detail-description").textContent=item.description||"";var command=item.installCommand||("npx shadcn@latest add "+(item.registryUrl||("https://registry.watermelon.sh/r/"+encodeURIComponent(item.slug)+".json")));installCommand.textContent=command;var dependencies=Array.isArray(item.dependencies)?item.dependencies:[];document.getElementById("dependency-list").textContent=dependencies.length?dependencies.join(", "):"No additional dependencies listed.";dialog.scrollTop=0;if(!dialog.open)dialog.showModal();if(addHistory)updateDetailHash(item,tab,true);activateTab(tab);}
   function openItem(item,tab,fromHash){setCurrentDetail(item,tab||"preview",!fromHash);}
   async function resolveHash(){var details=readDetailHash();if(!details||!details.kind||!details.slug)return;var item=state.items.get(details.kind+"|"+details.slug);if(item){openItem(item,details.tab,true);return;}try{var result=await getJson("https://ui.watermelon.sh/api/v1/catalog/entries/"+encodeURIComponent(details.kind)+"/"+encodeURIComponent(details.slug));if(result&&result.entry){item=result.entry;state.items.set(keyFor(item),item);openItem(item,details.tab,true);}}catch(error){window.history.replaceState(null,"",window.location.pathname+window.location.search);}}
   function showCodeFile(index){state.activeFile=Math.max(0,Math.min(index,state.files.length-1));var file=state.files[state.activeFile];codeEl.textContent=file&&typeof file.content==="string"?file.content:"No source content was returned for this file.";copyCodeButton.disabled=!(file&&file.content);}
@@ -286,7 +329,7 @@
   categoryList.addEventListener("click",function(event){var button=event.target.closest("[data-category]");if(!button)return;state.category=button.dataset.category||"";loadEntries();});
   document.querySelectorAll(".type-filter").forEach(function(button){button.addEventListener("click",function(){state.kind=button.dataset.kind;state.category="";document.querySelectorAll(".type-filter").forEach(function(other){var active=other===button;other.classList.toggle("is-active",active);other.setAttribute("aria-pressed",String(active));});loadEntries();});});
   searchInput.addEventListener("input",function(){window.clearTimeout(searchTimer);state.query=searchInput.value.trim();searchTimer=window.setTimeout(loadEntries,280);});
-  document.addEventListener("click",function(event){var opener=event.target.closest("[data-open-component]");if(opener){var item=state.items.get(opener.dataset.openComponent);if(item)openItem(item,opener.dataset.openTab||"preview",false);return;}var tab=event.target.closest("[data-detail-tab]");if(tab){activateTab(tab.dataset.detailTab);return;}if(event.target.closest(".dialog-close")){dialog.close();return;}if(event.target===dialog){dialog.close();return;}if(event.target.closest("#copy-code-button")){var file=state.files[state.activeFile];if(file&&file.content)copyText(file.content,copyCodeButton,"Copied");return;}if(event.target.closest("#copy-install-button")){copyText(installCommand.textContent,copyInstallButton,"Copied");}});
+  document.addEventListener("click",function(event){var opener=event.target.closest("[data-open-component]");if(opener){var item=state.items.get(opener.dataset.openComponent);if(item)openItem(item,opener.dataset.openTab||"preview",false);return;}var tab=event.target.closest("[data-detail-tab]");if(tab){activateTab(tab.dataset.detailTab);return;}if(event.target.closest(".dialog-close")){dialog.close();return;}if(event.target.closest("#copy-code-button")){var file=state.files[state.activeFile];if(file&&file.content)copyText(file.content,copyCodeButton,"Copied");return;}if(event.target.closest("#copy-install-button")){copyText(installCommand.textContent,copyInstallButton,"Copied");}});
   codeSelect.addEventListener("change",function(){showCodeFile(Number(codeSelect.value));});
   dialog.addEventListener("close",function(){previewSurface.replaceChildren();if(window.location.hash.indexOf("#component=")===0)window.history.replaceState(null,"",window.location.pathname+window.location.search);});
   window.addEventListener("popstate",function(){var details=readDetailHash();if(details){resolveHash();}else if(dialog.open){dialog.close();}});
