@@ -25,6 +25,20 @@
     return "Hello, I want to purchase " + title + ". Please confirm availability and the current price.";
   }
 
+  function socialServiceDescription(serviceName) {
+    var name = (serviceName || "social media service").trim().toLowerCase();
+    if (name.indexOf("view") !== -1) {
+      return "Original service for organic " + name + " to help more people see your content.";
+    }
+    if (name.indexOf("like") !== -1) {
+      return "Original service for organic " + name + " to support post engagement.";
+    }
+    if (name.indexOf("follower") !== -1) {
+      return "Original service for organic followers and gradual profile growth.";
+    }
+    return "Original " + name + " service to support your social content.";
+  }
+
   function upgradeProductLinks(root) {
     root.querySelectorAll(".shop-product-action").forEach(function (link) {
       if (link.closest(".shop-account-detail")) return;
@@ -34,12 +48,12 @@
       if (!titleNode && card) titleNode = card.querySelector(".shop-product-info h2");
       if (!titleNode) titleNode = link.closest(".shop-product-info") && link.closest(".shop-product-info").querySelector("h2");
       if (!titleNode) return;
-      setWhatsAppLink(link, productMessage(titleNode.textContent.trim()), "Buy on WhatsApp");
+      setWhatsAppLink(link, productMessage(titleNode.textContent.trim()), "Buy");
     });
 
     root.querySelectorAll(".shop-account-contact").forEach(function (link) {
       var title = root.querySelector(".shop-account-detail-copy h1");
-      setWhatsAppLink(link, productMessage(title ? title.textContent.trim() : "this account"), "Buy on WhatsApp");
+      setWhatsAppLink(link, productMessage(title ? title.textContent.trim() : "this account"), "Buy");
     });
 
     root.querySelectorAll(".shop-product-price,.shop-template-price,.shop-template-detail-price").forEach(function (price) {
@@ -49,7 +63,7 @@
       if (label.textContent.trim() === "Sample listing") setText(label, "Available on request");
     });
     root.querySelectorAll(".shop-price-disclaimer").forEach(function (note) {
-      setText(note, "Final price and availability are confirmed on WhatsApp.");
+      setText(note, "Final price and availability are confirmed before ordering.");
     });
   }
 
@@ -72,42 +86,27 @@
     var platform = panel.querySelector(".smm-platform-header h2");
     var serviceSelect = panel.querySelector("[data-service-select]");
     var service = serviceSelect && serviceSelect.options[serviceSelect.selectedIndex];
-    var serviceName = service ? service.textContent.trim() : "social media marketing";
     var description = panel.querySelector("[data-service-description]");
-    if (description) {
-      setText(description, "Choose a quantity, then send the selected " +
-        ((platform && platform.textContent.trim()) || "social") + " service for a WhatsApp quote.");
-    }
+    if (description) setText(description, socialServiceDescription(service && service.textContent));
     panel.querySelectorAll(".smm-package").forEach(function (button) {
       var amount = button.querySelector("strong");
       var note = button.querySelector("small");
-      setText(amount, "Quote on WhatsApp");
+      setText(amount, "Price on request");
       setText(note, "Requested quantity");
     });
     var summary = panel.querySelector(".smm-price-summary");
     if (summary) {
       var labels = summary.querySelectorAll("span");
-      setText(labels[0], "Selected quantity · final quote in WhatsApp");
+      setText(labels[0], "Selected quantity");
       var total = summary.querySelector("[data-price-total]");
       setText(total, "Price on request");
       var formula = summary.querySelector("[data-price-formula]");
-      setText(formula, "Choose a quantity; confirm the exact price before ordering.");
+      setText(formula, "Confirm the final price before ordering.");
       var action = summary.querySelector("a");
-      if (action) setText(action, "Buy on WhatsApp");
+      if (action) setText(action, "Buy");
     }
 
-    var qualityNote = panel.querySelector(".smm-quality-note");
-    if (qualityNote) {
-      setText(qualityNote, "Quantities are requested targets, not guaranteed results. Confirm the fulfilment method and delivery timing in WhatsApp.");
-    }
-    if (!panel.querySelector(".smm-market-benchmarks")) {
-      var benchmarks = document.createElement("aside");
-      benchmarks.className = "smm-market-benchmarks";
-      benchmarks.innerHTML = '<strong>Ghana market reference for managed campaigns</strong>' +
-        '<p>Published plans list Starter at GH₵3,000/month (2 platforms, 12 posts), Professional at GH₵5,500/month, and Enterprise at GH₵8,500/month. These are market benchmarks for campaign management—not fixed prices for likes, followers or views. Nook confirms each order price in WhatsApp.</p>' +
-        '<a href="https://websysgh.com/digital-marketing-packages" target="_blank" rel="noopener noreferrer">View published price reference</a>';
-      panel.querySelector(".smm-panel-shell").appendChild(benchmarks);
-    }
+    panel.querySelectorAll(".smm-market-benchmarks,.smm-quality-note").forEach(function (note) { note.remove(); });
   }
 
   function enhanceShop() {
@@ -116,7 +115,7 @@
     root.querySelectorAll(".shop-category-heading").forEach(function (heading) {
       if (heading.querySelector("h1") && heading.querySelector("h1").textContent.trim() === "Choose your platform.") {
         var intro = heading.querySelector("p:last-child");
-        setText(intro, "Choose a platform, service and quantity. Final prices are confirmed in WhatsApp.");
+        setText(intro, "Choose a platform, service and quantity.");
       }
     });
     root.querySelectorAll("[data-platform-panel]").forEach(enhanceSocialPanel);
