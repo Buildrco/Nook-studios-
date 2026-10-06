@@ -106,3 +106,24 @@ function start(){if(!pending)pending=run().catch(function(){}).finally(function(
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(start,120);},{once:true});else setTimeout(start,120);
 window.addEventListener("online",start);
 })();
+(function(){
+  if(document.getElementById("nook-growth-card-styles"))return;
+  var style=document.createElement("style");
+  style.id="nook-growth-card-styles";
+  style.textContent=".nook-growth-section{height:auto!important;min-height:0!important}.nook-growth-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,232px))!important;justify-content:center!important;gap:24px!important;width:100%!important;max-width:488px!important;margin-left:auto!important;margin-right:auto!important}.nook-growth-grid>div{width:232px!important;max-width:100%!important}.nook-growth-grid>div>div:first-child{width:232px!important;height:312px!important;background:#f1f3f5!important}.nook-growth-grid h3,.nook-growth-grid p{color:#27313a!important}@media(max-width:540px){.nook-growth-grid{grid-template-columns:minmax(0,232px)!important;max-width:232px!important;gap:20px!important}}";
+  document.head.appendChild(style);
+  function apply(){
+    var sections=document.querySelectorAll("section");
+    for(var i=0;i<sections.length;i++){
+      var section=sections[i];
+      var heading=Array.from(section.querySelectorAll("span")).find(function(node){return node.textContent.trim()==="Everything Your Brand Needs to Grow.";});
+      if(!heading)continue;
+      var grid=heading.parentElement&&heading.parentElement.nextElementSibling;
+      if(!grid)continue;
+      section.classList.add("nook-growth-section");
+      grid.classList.add("nook-growth-grid");
+    }
+  }
+  apply();
+  if(document.body)new MutationObserver(apply).observe(document.body,{childList:true,subtree:true});
+})();
