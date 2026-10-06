@@ -9,11 +9,16 @@
     return "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
   }
 
+  function setText(node, value) {
+    if (node && node.textContent !== value) node.textContent = value;
+  }
+
   function setWhatsAppLink(link, message, label) {
-    link.href = whatsappUrl(message);
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    if (label) link.textContent = label;
+    var url = whatsappUrl(message);
+    if (link.href !== url) link.href = url;
+    if (link.target !== "_blank") link.target = "_blank";
+    if (link.rel !== "noopener noreferrer") link.rel = "noopener noreferrer";
+    if (label) setText(link, label);
   }
 
   function productMessage(title) {
@@ -38,13 +43,13 @@
     });
 
     root.querySelectorAll(".shop-product-price,.shop-template-price,.shop-template-detail-price").forEach(function (price) {
-      price.textContent = "Price on request";
+      setText(price, "Price on request");
     });
     root.querySelectorAll(".shop-product-meta > span:first-child").forEach(function (label) {
-      if (label.textContent.trim() === "Sample listing") label.textContent = "Available on request";
+      if (label.textContent.trim() === "Sample listing") setText(label, "Available on request");
     });
     root.querySelectorAll(".shop-price-disclaimer").forEach(function (note) {
-      note.textContent = "Final price and availability are confirmed on WhatsApp.";
+      setText(note, "Final price and availability are confirmed on WhatsApp.");
     });
   }
 
@@ -70,41 +75,30 @@
     var serviceName = service ? service.textContent.trim() : "social media marketing";
     var description = panel.querySelector("[data-service-description]");
     if (description) {
-      description.textContent = "Choose a quantity, then send the selected " +
-        ((platform && platform.textContent.trim()) || "social") + " service for a WhatsApp quote.";
+      setText(description, "Choose a quantity, then send the selected " +
+        ((platform && platform.textContent.trim()) || "social") + " service for a WhatsApp quote.");
     }
     panel.querySelectorAll(".smm-package").forEach(function (button) {
       var amount = button.querySelector("strong");
       var note = button.querySelector("small");
-      if (amount) amount.textContent = "Quote on WhatsApp";
-      if (note) note.textContent = "Requested quantity";
+      setText(amount, "Quote on WhatsApp");
+      setText(note, "Requested quantity");
     });
     var summary = panel.querySelector(".smm-price-summary");
     if (summary) {
       var labels = summary.querySelectorAll("span");
-      if (labels[0]) labels[0].textContent = "Selected quantity · final quote in WhatsApp";
+      setText(labels[0], "Selected quantity · final quote in WhatsApp");
       var total = summary.querySelector("[data-price-total]");
-      if (total) total.textContent = "Price on request";
+      setText(total, "Price on request");
       var formula = summary.querySelector("[data-price-formula]");
-      if (formula) formula.textContent = "Choose a quantity; confirm the exact price before ordering.";
+      setText(formula, "Choose a quantity; confirm the exact price before ordering.");
       var action = summary.querySelector("a");
-      if (action) {
-        var quantity = panel.querySelector('.smm-package[aria-pressed="true"]');
-        var quantityText = quantity ? quantity.querySelector("span").textContent.trim() : "selected quantity";
-        var target = panel.querySelector("[data-whatsapp-target]");
-        var targetText = target && target.value.trim() ? target.value.trim() : "I will share my account or post link in this chat";
-        var platformName = platform ? platform.textContent.trim() : "social media";
-        var message = "Hello, I want to purchase " + platformName + " " + serviceName +
-          " for this account.\nQuantity: " + quantityText +
-          "\nTarget account/post: " + targetText +
-          "\nPlease confirm the current price and delivery details.";
-        setWhatsAppLink(action, message, "Buy on WhatsApp");
-      }
+      if (action) setText(action, "Buy on WhatsApp");
     }
 
     var qualityNote = panel.querySelector(".smm-quality-note");
     if (qualityNote) {
-      qualityNote.textContent = "Quantities are requested targets, not guaranteed results. Confirm the fulfilment method and delivery timing in WhatsApp.";
+      setText(qualityNote, "Quantities are requested targets, not guaranteed results. Confirm the fulfilment method and delivery timing in WhatsApp.");
     }
     if (!panel.querySelector(".smm-market-benchmarks")) {
       var benchmarks = document.createElement("aside");
@@ -122,10 +116,14 @@
     root.querySelectorAll(".shop-category-heading").forEach(function (heading) {
       if (heading.querySelector("h1") && heading.querySelector("h1").textContent.trim() === "Choose your platform.") {
         var intro = heading.querySelector("p:last-child");
-        if (intro) intro.textContent = "Choose a platform, service and quantity. Final prices are confirmed in WhatsApp.";
+        setText(intro, "Choose a platform, service and quantity. Final prices are confirmed in WhatsApp.");
       }
     });
     root.querySelectorAll("[data-platform-panel]").forEach(enhanceSocialPanel);
+    var orderAction = root.querySelector("[data-place-order]");
+    var orderNote = root.querySelector(".unlock-order-note");
+    setText(orderAction, "Continue to WhatsApp");
+    setText(orderNote, "Your selected service and 15-digit IMEI will be prefilled in WhatsApp. Tap Send there to submit.");
   }
 
   document.addEventListener("click", function (event) {
@@ -153,16 +151,31 @@
     window.open(whatsappUrl(message), "_blank", "noopener,noreferrer");
   }, true);
 
+  if (categoryContent) categoryContent.addEventListener("click", function (event) {
+    var action = event.target.closest && event.target.closest(".smm-price-summary a");
+    if (!action) return;
+    var panel = action.closest("[data-platform-panel]");
+    if (!panel) return;
+    event.preventDefault();
+    var platform = panel.querySelector(".smm-platform-header h2");
+    var serviceSelect = panel.querySelector("[data-service-select]");
+    var service = serviceSelect && serviceSelect.options[serviceSelect.selectedIndex];
+    var quantity = panel.querySelector('.smm-package[aria-pressed="true"]');
+    var target = panel.querySelector("[data-whatsapp-target]");
+    var quantityText = quantity ? quantity.querySelector("span").textContent.trim() : "selected quantity";
+    var targetText = target && target.value.trim() ? target.value.trim() : "I will share my account or post link in this chat";
+    var message = "Hello, I want to purchase " +
+      ((platform && platform.textContent.trim()) || "social media") + " " +
+      ((service && service.textContent.trim()) || "marketing service") +
+      " for this account.\nQuantity: " + quantityText +
+      "\nTarget account/post: " + targetText +
+      "\nPlease confirm the current price and delivery details.";
+    window.open(whatsappUrl(message), "_blank", "noopener,noreferrer");
+  });
+
   function observe() {
     enhanceShop();
     if (categoryContent) new MutationObserver(enhanceShop).observe(categoryContent, { childList: true, subtree: true });
-    var orderObserver = new MutationObserver(function () {
-      var action = document.querySelector("[data-place-order]");
-      var note = document.querySelector(".unlock-order-note");
-      if (action) action.textContent = "Continue to WhatsApp";
-      if (note) note.textContent = "Your selected service and 15-digit IMEI will be prefilled in WhatsApp. Tap Send there to submit.";
-    });
-    orderObserver.observe(document.body, { childList: true, subtree: true });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", observe, { once: true });
