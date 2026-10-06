@@ -5,55 +5,73 @@
       image: '/images/portfolio/dnl-electricals-website.webp',
       title: 'DNL Electricals Website Design',
       teaser: 'A responsive online store for electrical products.',
-      description: 'We designed a responsive storefront that makes electrical products, categories and service benefits easy to scan on desktop and mobile. The main challenge was fitting a broad catalogue into a clear shopping flow.'
+      description: 'We designed a responsive storefront that makes electrical products, categories and service benefits easy to scan on desktop and mobile. The main challenge was fitting a broad catalogue into a clear shopping flow.',
+      link: 'https://dnldelectricals.com',
+      linkLabel: 'View live site'
     },
     {
       image: '/images/portfolio/chrisdem-logistics-website.webp',
       title: 'Chrisdem Logistics Website Design',
       teaser: 'A clear, mobile-ready website for logistics services.',
-      description: 'We designed a responsive logistics site that highlights freight services, shipment tracking and quote requests. The challenge was making several service paths easy to navigate on desktop and mobile.'
+      description: 'We designed a responsive logistics site that highlights freight services, shipment tracking and quote requests. The challenge was making several service paths easy to navigate on desktop and mobile.',
+      link: 'https://chrisdemlogistics.com',
+      linkLabel: 'View live site'
     },
     {
       image: '/images/portfolio/sifin-mart-website.webp',
       title: 'Sifin Mart Website Design',
       teaser: 'A mobile-ready storefront for everyday shopping.',
-      description: 'We designed a grocery storefront with clear product categories, deals and delivery information. The main challenge was helping shoppers find everyday essentials quickly across desktop and mobile.'
+      description: 'We designed a grocery storefront with clear product categories, deals and delivery information. The main challenge was helping shoppers find everyday essentials quickly across desktop and mobile.',
+      link: 'https://sifinmartgh.com',
+      linkLabel: 'View live site'
     },
     {
       image: '/images/portfolio/chrisdem-logistics-services-website.webp',
       title: 'Chrisdem Logistics Services Website',
       teaser: 'A responsive presentation of Chrisdem’s freight services.',
-      description: 'We created a service-focused layout for Chrisdem Logistics, bringing its freight options, global coverage and quote path together. The challenge was keeping key logistics information clear at every screen size.'
+      description: 'We created a service-focused layout for Chrisdem Logistics, bringing its freight options, global coverage and quote path together. The challenge was keeping key logistics information clear at every screen size.',
+      link: 'https://chrisdemlogistics.com',
+      linkLabel: 'View live site'
     },
     {
       image: '/images/portfolio/seewest-consult-website.webp',
       title: 'Seewest Consult Website Design',
       teaser: 'A responsive website for engineering and construction services.',
-      description: 'We designed a responsive consultancy website that brings engineering, procurement, construction and sustainability services into one place. The main challenge was giving each service a clear path without crowding the page.'
+      description: 'We designed a responsive consultancy website that brings engineering, procurement, construction and sustainability services into one place. The main challenge was giving each service a clear path without crowding the page.',
+      link: 'https://seewestconsult.com',
+      linkLabel: 'View live site'
     },
     {
       image: '/images/portfolio/ericann-engineering-website.webp',
       title: 'Ericann Engineering Website Design',
       teaser: 'A mobile-friendly website for an engineering company.',
-      description: 'We designed a mobile-friendly engineering website that organizes project expertise, services and quote enquiries. The challenge was turning technical information into a straightforward, easy-to-scan experience.'
+      description: 'We designed a mobile-friendly engineering website that organizes project expertise, services and quote enquiries. The challenge was turning technical information into a straightforward, easy-to-scan experience.',
+      link: 'https://ericannengineering.com',
+      linkLabel: 'View live site'
     },
     {
       image: '/images/portfolio/tpwci-website.webp',
       title: 'TPWCI Website Design',
       teaser: 'A product-focused website for TPWCI.',
-      description: 'We designed a responsive website that brings TPWCI’s products, service categories and community benefits into one place. The challenge was balancing a varied catalogue with the brand’s people-first mission.'
+      description: 'We designed a responsive website that brings TPWCI’s products, service categories and community benefits into one place. The challenge was balancing a varied catalogue with the brand’s people-first mission.',
+      link: 'https://tpwci.com',
+      linkLabel: 'View live site'
     },
     {
       image: '/images/portfolio/dawig-energy-website.webp',
       title: 'Dawig Energy Website Design',
       teaser: 'A responsive website for energy services.',
-      description: 'We designed a responsive energy-sector website that makes expertise, safety commitments and service areas easy to find. The challenge was presenting complex services clearly on desktop and mobile.'
+      description: 'We designed a responsive energy-sector website that makes expertise, safety commitments and service areas easy to find. The challenge was presenting complex services clearly on desktop and mobile.',
+      link: 'https://dawigenergy.com',
+      linkLabel: 'View live site'
     },
     {
       image: '/images/portfolio/ceee-website.webp',
       title: 'CEEE Website Design',
       teaser: 'A mobile-ready storefront for a broad product range.',
-      description: 'We designed an online storefront with clear product categories, search and shopper support. The challenge was making a varied product range simple to browse on small screens.'
+      description: 'We designed an online storefront with clear product categories, search and shopper support. The challenge was making a varied product range simple to browse on small screens.',
+      link: 'https://ceee.wuaze.com',
+      linkLabel: 'View live site'
     }
   ];
 
@@ -144,8 +162,12 @@
     detailTeaser.textContent = project.teaser;
     detailDescription.textContent = project.description;
     detailDisclosure.open = false;
-    detailLink.hidden = true;
     detailLink.removeAttribute('href');
+    detailLink.hidden = !project.link;
+    if (project.link) {
+      detailLink.href = project.link;
+      detailLink.textContent = project.linkLabel || 'View live site';
+    }
     relatedHeading.textContent = 'More from ' + categoryLabel;
     relatedGrid.replaceChildren();
 
@@ -173,6 +195,17 @@
   gallery.addEventListener('keydown', interceptExtraWork, true);
   relatedGrid.addEventListener('click', interceptExtraWork, true);
   relatedGrid.addEventListener('keydown', interceptExtraWork, true);
+  [detailCategory, relatedHeading].forEach(function (element) {
+    if (!element) return;
+    new MutationObserver(function () {
+      var updatedText = element.textContent.replace('Web & Software', categoryLabel);
+      if (updatedText !== element.textContent) element.textContent = updatedText;
+    }).observe(element, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+  });
   dialog.addEventListener('close', function () {
     if (lastTrigger && document.contains(lastTrigger)) {
       lastTrigger.focus({ preventScroll: true });
