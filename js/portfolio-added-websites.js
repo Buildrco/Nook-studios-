@@ -212,3 +212,9 @@
     }
   });
 })();
+
+(function () {
+  var script = document.createElement('script');
+  script.src = '/js/portfolio-added-photography.js';
+  document.body.appendChild(script);
+})();
