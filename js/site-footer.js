@@ -1,6 +1,15 @@
 (function () {
   "use strict";
 
+  if (
+    !window.__nookGalleryEnhancementsInstalled &&
+    !document.querySelector('script[src="/js/gallery-enhancements.js"]')
+  ) {
+    var protectionScript = document.createElement("script");
+    protectionScript.src = "/js/gallery-enhancements.js";
+    document.head.appendChild(protectionScript);
+  }
+
   if (window.__nookUnifiedFooterInstalled) return;
   window.__nookUnifiedFooterInstalled = true;
 
