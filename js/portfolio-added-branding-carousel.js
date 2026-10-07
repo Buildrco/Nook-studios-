@@ -3,15 +3,16 @@
   var projects = [
     {
       title: 'Verikros — Cross-Border Business Carousel',
-      teaser: 'A five-slide social campaign for Verikros and the teams behind cross-border business.',
-      description: 'An illustrated five-slide Instagram carousel for Verikros, following the needs of importers, exporters, growing businesses, finance teams, and multi-market operations. Each 4:5 design reads on its own and continues the story as you swipe.',
+      teaser: 'A six-slide social campaign for Verikros and the teams behind cross-border business.',
+      description: 'An illustrated six-slide Instagram carousel for Verikros, following the needs of importers, exporters, growing businesses, finance teams, and multi-market operations. Each 4:5 design reads on its own and continues the story as you swipe.',
       cover: '/images/portfolio/verikros-global-business-carousel-01.webp',
       images: [
         { src: '/images/portfolio/verikros-global-business-carousel-01.webp', alt: 'Slide 1 of 5: The Importer — your next shipment depends on paying an overseas supplier.' },
         { src: '/images/portfolio/verikros-global-business-carousel-02.webp', alt: 'Slide 2 of 5: The Exporter — your customers are abroad, your business is here.' },
         { src: '/images/portfolio/verikros-global-business-carousel-03.webp', alt: 'Slide 3 of 5: The Growing Business — suppliers and partners are no longer in one country.' },
         { src: '/images/portfolio/verikros-global-business-carousel-04.webp', alt: 'Slide 4 of 5: The Finance Team — multiple payments, multiple currencies, one team managing it all.' },
-        { src: '/images/portfolio/verikros-global-business-carousel-05.webp', alt: 'Slide 5 of 5: The Multi Market Business — your operations do not stop at the border.' }
+        { src: '/images/portfolio/verikros-global-business-carousel-05.webp', alt: 'Slide 5 of 6: The Multi Market Business — your operations do not stop at the border.' },
+        { src: '/images/portfolio/verikros-global-business-carousel-06.webp', alt: 'Slide 6 of 6: Does this sound like your business? Global payments built on trust.' }
       ]
     },
     {
@@ -82,6 +83,28 @@
     });
     card.appendChild(preview);
     card.appendChild(dots);
+    var previewStart = null;
+    card.__carouselSwipeClick = false;
+    preview.addEventListener('pointerdown', function (event) {
+      if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      previewStart = { x: event.clientX, y: event.clientY };
+    }, { passive: true });
+    preview.addEventListener('pointerup', function (event) {
+      if (!previewStart) return;
+      var dx = event.clientX - previewStart.x;
+      var dy = event.clientY - previewStart.y;
+      previewStart = null;
+      if (Math.abs(dx) < 30 || Math.abs(dx) < Math.abs(dy) * 1.15) return;
+      event.preventDefault();
+      card.__carouselSwipeClick = true;
+      window.setTimeout(function () { card.__carouselSwipeClick = false; }, 700);
+      var activeIndex = Array.prototype.findIndex.call(dots.children, function (dot) { return dot.classList.contains('is-active'); });
+      activeIndex = (activeIndex + (dx < 0 ? 1 : -1) + project.images.length) % project.images.length;
+      image.src = project.images[activeIndex].src;
+      image.alt = project.images[activeIndex].alt;
+      Array.prototype.forEach.call(dots.children, function (dot, dotIndex) { dot.classList.toggle('is-active', dotIndex === activeIndex); });
+    });
+    preview.addEventListener('pointercancel', function () { previewStart = null; });
     return card;
   }
 
@@ -191,6 +214,7 @@
   function intercept(event) {
     var card = event.target.closest && event.target.closest('[data-branding-carousel-index]');
     if (card && (gallery.contains(card) || relatedGrid.contains(card))) {
+      if (event.type === 'click' && card.__carouselSwipeClick) { card.__carouselSwipeClick = false; event.preventDefault(); event.stopImmediatePropagation(); return; }
       if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
       event.stopImmediatePropagation();
