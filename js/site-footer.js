@@ -72,17 +72,17 @@
       var style = document.createElement("style");
       style.id = "nook-unified-footer-styles";
       style.textContent =
-        ".nook-site-footer{display:block!important;width:100%!important;margin:0!important;padding:64px 24px 24px!important;background:#2873a2!important;color:#fff!important;border:0!important;font:400 14px/1.55 Arial,sans-serif!important;box-sizing:border-box!important}" +
+        ".nook-site-footer{display:block!important;width:100%!important;margin:0!important;padding:64px 24px 24px!important;background:#2873a2!important;color:#fff!important;border:0!important;font-family:'Work Sans','Work Sans Fallback',system-ui,Arial,sans-serif!important;font-size:16px!important;font-weight:500!important;line-height:1.45!important;box-sizing:border-box!important}" +
         ".nook-site-footer *{box-sizing:border-box!important}" +
         ".nook-footer-inner{width:min(1220px,100%);margin:0 auto}" +
         ".nook-footer-columns{display:grid;grid-template-columns:minmax(150px,1.1fr) repeat(4,minmax(130px,1fr));gap:28px;padding-bottom:40px}" +
         ".nook-footer-brand{display:inline-flex;align-items:flex-start;max-width:220px}" +
         ".nook-footer-brand img{display:block;width:210px;height:95px;object-fit:contain;object-position:left center}" +
-        ".nook-site-footer h2{margin:0 0 14px;color:#fff!important;font:700 15px/1.3 Arial,sans-serif!important}" +
-        ".nook-site-footer a{color:#fff!important;text-decoration:none!important;opacity:.92}" +
+        ".nook-site-footer h2{margin:0 0 14px;color:#feffff!important;font-family:'Bricolage Grotesque','Work Sans',sans-serif!important;font-size:20px!important;font-weight:600!important;line-height:1.2!important;letter-spacing:-.02em!important}" +
+        ".nook-site-footer a{color:#f9fafb!important;font-size:16px!important;font-weight:500!important;line-height:1.45!important;text-decoration:none!important;opacity:.92}" +
         ".nook-site-footer a:hover,.nook-site-footer a:focus-visible{opacity:1;text-decoration:underline!important}" +
         ".nook-footer-nav,.nook-footer-contact,.nook-footer-social,.nook-footer-legal{display:flex;flex-direction:column;align-items:flex-start;gap:10px}" +
-        ".nook-footer-copyright{padding-top:18px;border-top:1px solid rgba(255,255,255,.28);font-size:13px}" +
+        ".nook-footer-copyright{padding-top:18px;border-top:1px solid rgba(255,255,255,.4);font-size:16px;font-weight:500;line-height:1.45}" +
         "@media(max-width:720px){.nook-site-footer{padding:44px 20px 20px!important}.nook-footer-columns{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 20px}.nook-footer-brand{grid-column:1/-1}.nook-footer-brand img{width:185px;height:82px}}" +
         "@media(max-width:420px){.nook-footer-columns{grid-template-columns:1fr;gap:26px}.nook-footer-brand{grid-column:auto}}";
       document.head.appendChild(style);
