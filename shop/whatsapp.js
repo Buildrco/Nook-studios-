@@ -1,6 +1,10 @@
 (function () {
   "use strict";
 
+  var galleryEnhancements = document.createElement("script");
+  galleryEnhancements.src = "/js/gallery-enhancements.js";
+  document.head.appendChild(galleryEnhancements);
+
   var whatsappNumber = "233557696771";
   var categoryContent = document.getElementById("shop-category-content");
   var activeUnlockCard = null;

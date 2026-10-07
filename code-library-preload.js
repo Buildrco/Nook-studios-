@@ -1,3 +1,4 @@
+(function(){var protectionScript=document.createElement('script');protectionScript.src='/js/gallery-enhancements.js';document.head.appendChild(protectionScript);}());
 (function(){
 "use strict";
 if(window.__nookLibraryPreloaderV3)return;window.__nookLibraryPreloaderV3=true;
