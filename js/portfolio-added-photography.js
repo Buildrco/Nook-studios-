@@ -41,6 +41,10 @@
 
   if (!gallery || !allGrid || !photoGrid || !filter) return;
 
+  photoGrid.querySelectorAll('.work-empty').forEach(function (empty) {
+    empty.remove();
+  });
+
   function createCard(project, index) {
     var card = document.createElement('figure');
     var image = document.createElement('img');
