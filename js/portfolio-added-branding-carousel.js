@@ -30,7 +30,8 @@
         { src: '/images/portfolio/sellquic-midnight-carousel-07.webp', alt: 'Slide 7 of 8: Launch your business in minutes with SellQuic.' },
         { src: '/images/portfolio/sellquic-midnight-carousel-08.webp', alt: 'Slide 8 of 8: What is new on your SellQuic dashboard? October updates.' }
       ]
-    }
+    },
+    { title: 'Funeral Poster Designs', teaser: 'Three funeral posters, each with its own tribute style.', description: 'A set of three funeral posters with distinct portraits, colours and layouts.', cover: '/images/portfolio/funeral-poster-amanda.webp', images: [ { src: '/images/portfolio/funeral-poster-amanda.webp', alt: 'Funeral poster for Amanda Okailey Tetteh in brown and gold.' }, { src: '/images/portfolio/funeral-poster-eudora.webp', alt: 'Funeral poster for Eudora Aduwa Anaman in black and gold.' }, { src: '/images/portfolio/funeral-poster-viviana.webp', alt: 'Funeral poster for Viviana Owusu Martin in blue and gold.' } ] }
   ];
 
   var gallery = document.getElementById('work-gallery');
@@ -98,6 +99,8 @@
   brandingGrid.insertBefore(makeCard(projects[0], 0, false), brandingGrid.firstChild);
   var brandingVerikrosCard = brandingGrid.firstChild;
   brandingGrid.insertBefore(makeCard(projects[1], 1, false), brandingVerikrosCard.nextSibling);
+  allGrid.appendChild(makeCard(projects[2], 2, true));
+  brandingGrid.appendChild(makeCard(projects[2], 2, false));
 
   function clearCarousel() {
     if (currentViewer && currentViewer.parentNode) currentViewer.parentNode.removeChild(currentViewer);
