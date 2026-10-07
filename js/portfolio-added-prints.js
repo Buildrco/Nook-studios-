@@ -127,7 +127,7 @@
     });
   }, { root: gallery, threshold: 0.15 }) : null;
 
-  function setDetails(project) {
+  function setDetails(project, selectedType, selectedIndex) {
     detailHeading.textContent = project.title;
     detailCategory.textContent = categoryLabel;
     detailTeaser.textContent = project.teaser;
@@ -137,21 +137,21 @@
     detailLink.hidden = true;
     relatedHeading.textContent = 'More from Prints';
     relatedGrid.replaceChildren();
-    var currentGroup = groups.indexOf(project);
     groups.forEach(function (suggestion, index) {
-      if (index === currentGroup) return;
-      var card = document.createElement('figure');
-      var image = document.createElement('img');
-      card.className = 'work-item print-suggestion-card';
+      if (selectedType === 'group' && index === selectedIndex) return;
+      var card = makeCarouselCard(suggestion, index, true);
       card.setAttribute('data-prints-suggestion-index', String(index));
-      card.setAttribute('role', 'button');
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', 'Open ' + suggestion.title + ' carousel');
-      image.src = suggestion.images[0].src;
-      image.alt = suggestion.images[0].alt;
-      image.loading = 'lazy';
-      image.decoding = 'async';
-      card.appendChild(image);
+      card.setAttribute('data-prints-suggestion-kind', 'group');
+      relatedGrid.appendChild(card);
+    });
+    videos.forEach(function (suggestion, index) {
+      if (selectedType === 'video' && index === selectedIndex) return;
+      var card = makeVideoCard(suggestion, index, true);
+      card.setAttribute('data-prints-suggestion-index', String(index));
+      card.setAttribute('data-prints-suggestion-kind', 'video');
+      var preview = card.querySelector('video');
+      preview.autoplay = false;
+      preview.preload = 'metadata';
       relatedGrid.appendChild(card);
     });
     relatedEmpty.hidden = relatedGrid.childElementCount > 0;
@@ -219,7 +219,7 @@
     controls.appendChild(dots);
     hero.appendChild(viewer);
     hero.appendChild(controls);
-    setDetails(project);
+    setDetails(project, 'group', index);
     if (!wasOpen) dialog.showModal();
     if (!wasOpen && trigger) trigger.focus({ preventScroll: true });
     else viewer.focus({ preventScroll: true });
@@ -234,9 +234,11 @@
   function openVideo(index, card) {
     var project = videos[index];
     if (!project) return;
+    clearPrintCarousel();
+    hero.classList.remove('has-branding-carousel');
     if (window.__openPortfolioDetail) window.__openPortfolioDetail(card, 'prints');
     detailVideo.controls = true;
-    setDetails(project);
+    setDetails(project, 'video', index);
     detailVideo.play().catch(function () {});
   }
   var printEmpty = printPanel.querySelector('.work-empty');
@@ -264,7 +266,9 @@
       if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
       event.stopImmediatePropagation();
-      openCarousel(groups[Number(suggestionCard.getAttribute('data-prints-suggestion-index'))], Number(suggestionCard.getAttribute('data-prints-suggestion-index')), suggestionCard);
+      var suggestionIndex = Number(suggestionCard.getAttribute('data-prints-suggestion-index'));
+      if (suggestionCard.getAttribute('data-prints-suggestion-kind') === 'video') openVideo(suggestionIndex, suggestionCard);
+      else openCarousel(groups[suggestionIndex], suggestionIndex, suggestionCard);
       return;
     }
     var videoCard = event.target.closest && event.target.closest('[data-prints-video-index]');
