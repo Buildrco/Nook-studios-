@@ -195,6 +195,24 @@
   gallery.addEventListener('keydown', interceptExtraWork, true);
   relatedGrid.addEventListener('click', interceptExtraWork, true);
   relatedGrid.addEventListener('keydown', interceptExtraWork, true);
+  var legacyWebsiteIndexes = [13, 14, 23, 24];
+  function includeWebsiteSuggestions(event) {
+    var card = event.target.closest && event.target.closest('[data-project-index]');
+    if (!card || card.hasAttribute('data-extra-work-index')) return;
+    if (legacyWebsiteIndexes.indexOf(Number(card.getAttribute('data-project-index'))) === -1) return;
+    window.setTimeout(function () {
+      if (!dialog.open || relatedGrid.querySelector('[data-web-related-suggestion]')) return;
+      projects.forEach(function (project, index) {
+        var relatedCard = createCard(project, index);
+        relatedCard.setAttribute('data-web-related-suggestion', '');
+        relatedCard.tabIndex = 0;
+        relatedGrid.appendChild(relatedCard);
+      });
+      relatedEmpty.hidden = relatedGrid.childElementCount > 0;
+    }, 0);
+  }
+  gallery.addEventListener('click', includeWebsiteSuggestions);
+  relatedGrid.addEventListener('click', includeWebsiteSuggestions);
   [detailCategory, relatedHeading].forEach(function (element) {
     if (!element) return;
     new MutationObserver(function () {
@@ -217,4 +235,9 @@
   var script = document.createElement('script');
   script.src = '/js/portfolio-added-photography.js';
   document.body.appendChild(script);
+})();
+(function () {
+  var footerScript = document.createElement('script');
+  footerScript.src = '/js/site-footer.js';
+  document.head.appendChild(footerScript);
 })();

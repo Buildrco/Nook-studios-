@@ -180,3 +180,8 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", observe, { once: true });
   else observe();
 })();
+(function () {
+  var footerScript = document.createElement("script");
+  footerScript.src = "/js/site-footer.js";
+  document.head.appendChild(footerScript);
+})();

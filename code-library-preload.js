@@ -107,6 +107,12 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 window.addEventListener("online",start);
 })();
 (function(){
+  var footerScript=document.createElement("script");
+  footerScript.src="/js/site-footer.js";
+  footerScript.defer=true;
+  document.head.appendChild(footerScript);
+})();
+(function(){
   if(!document.getElementById("nook-growth-card-styles")){
     var style=document.createElement("style");
     style.id="nook-growth-card-styles";
