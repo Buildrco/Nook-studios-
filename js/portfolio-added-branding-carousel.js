@@ -59,7 +59,6 @@
   function makeCard(project, index, isVisible) {
     var card = document.createElement('figure');
     var preview = document.createElement('div');
-    var image = document.createElement('img');
     var dots = document.createElement('span');
     card.className = 'work-item branding-carousel-card';
     card.setAttribute('data-branding-carousel-index', String(index));
@@ -68,12 +67,15 @@
     card.setAttribute('aria-haspopup', 'dialog');
     card.setAttribute('aria-label', 'Open ' + project.title + ', a ' + project.images.length + '-slide carousel.');
     preview.className = 'branding-carousel-preview';
-    image.src = project.cover;
-    image.alt = project.title + ' carousel cover';
-    image.loading = 'lazy';
-    image.decoding = 'async';
-    image.draggable = false;
-    preview.appendChild(image);
+    project.images.forEach(function (slide) {
+      var image = document.createElement('img');
+      image.src = slide.src;
+      image.alt = slide.alt;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.draggable = false;
+      preview.appendChild(image);
+    });
     dots.className = 'branding-carousel-preview-dots';
     dots.setAttribute('aria-hidden', 'true');
     project.images.forEach(function (_, dotIndex) {
@@ -83,31 +85,12 @@
     });
     card.appendChild(preview);
     card.appendChild(dots);
-    var previewStart = null;
-    card.__carouselSwipeClick = false;
-    preview.addEventListener('pointerdown', function (event) {
-      if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
-      previewStart = { x: event.clientX, y: event.clientY };
-    }, { passive: true });
-    preview.addEventListener('pointerup', function (event) {
-      if (!previewStart) return;
-      var dx = event.clientX - previewStart.x;
-      var dy = event.clientY - previewStart.y;
-      previewStart = null;
-      if (Math.abs(dx) < 30 || Math.abs(dx) < Math.abs(dy) * 1.15) return;
-      event.preventDefault();
-      card.__carouselSwipeClick = true;
-      window.setTimeout(function () { card.__carouselSwipeClick = false; }, 700);
-      var activeIndex = Array.prototype.findIndex.call(dots.children, function (dot) { return dot.classList.contains('is-active'); });
-      activeIndex = (activeIndex + (dx < 0 ? 1 : -1) + project.images.length) % project.images.length;
-      image.src = project.images[activeIndex].src;
-      image.alt = project.images[activeIndex].alt;
+    preview.addEventListener('scroll', function () {
+      var activeIndex = preview.clientWidth ? Math.round(preview.scrollLeft / preview.clientWidth) : 0;
       Array.prototype.forEach.call(dots.children, function (dot, dotIndex) { dot.classList.toggle('is-active', dotIndex === activeIndex); });
-    });
-    preview.addEventListener('pointercancel', function () { previewStart = null; });
+    }, { passive: true });
     return card;
   }
-
   var verikrosCard = makeCard(projects[0], 0, true);
   var sellquicCard = makeCard(projects[1], 1, false);
   allGrid.insertBefore(verikrosCard, allGrid.firstChild);

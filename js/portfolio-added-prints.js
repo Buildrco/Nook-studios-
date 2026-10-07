@@ -65,18 +65,9 @@
   var relatedEmpty = document.getElementById('work-detail-empty');
   if (!gallery || !allGrid || !printGrid || !dialog || !hero || !detailImage || !detailVideo) return;
 
-  function updatePreview(image, dots, project, index) {
-    var slideIndex = (index + project.images.length) % project.images.length;
-    image.src = project.images[slideIndex].src;
-    image.alt = project.images[slideIndex].alt;
-    Array.prototype.forEach.call(dots.children, function (dot, i) {
-      dot.classList.toggle('is-active', i === slideIndex);
-    });
-  }
   function makeCarouselCard(project, index, visible) {
     var card = document.createElement('figure');
     var preview = document.createElement('div');
-    var image = document.createElement('img');
     var dots = document.createElement('span');
     card.className = 'work-item branding-carousel-card prints-carousel-card';
     card.setAttribute('data-prints-carousel-index', String(index));
@@ -85,12 +76,15 @@
     card.setAttribute('aria-haspopup', 'dialog');
     card.setAttribute('aria-label', 'Open ' + project.title + ', a ' + project.images.length + ' image carousel.');
     preview.className = 'prints-carousel-preview';
-    image.src = project.images[0].src;
-    image.alt = project.images[0].alt;
-    image.loading = 'lazy';
-    image.decoding = 'async';
-    image.draggable = false;
-    preview.appendChild(image);
+    project.images.forEach(function (slide) {
+      var image = document.createElement('img');
+      image.src = slide.src;
+      image.alt = slide.alt;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.draggable = false;
+      preview.appendChild(image);
+    });
     dots.className = 'branding-carousel-preview-dots';
     dots.setAttribute('aria-hidden', 'true');
     project.images.forEach(function (_, dotIndex) {
@@ -100,25 +94,10 @@
     });
     card.appendChild(preview);
     card.appendChild(dots);
-    var start = null;
-    card.__carouselSwipeClick = false;
-    preview.addEventListener('pointerdown', function (event) {
-      if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
-      start = { x: event.clientX, y: event.clientY };
+    preview.addEventListener('scroll', function () {
+      var activeIndex = preview.clientWidth ? Math.round(preview.scrollLeft / preview.clientWidth) : 0;
+      Array.prototype.forEach.call(dots.children, function (dot, dotIndex) { dot.classList.toggle('is-active', dotIndex === activeIndex); });
     }, { passive: true });
-    preview.addEventListener('pointerup', function (event) {
-      if (!start) return;
-      var dx = event.clientX - start.x;
-      var dy = event.clientY - start.y;
-      start = null;
-      if (Math.abs(dx) < 30 || Math.abs(dx) < Math.abs(dy) * 1.15) return;
-      event.preventDefault();
-      card.__carouselSwipeClick = true;
-      window.setTimeout(function () { card.__carouselSwipeClick = false; }, 700);
-      var active = Array.prototype.findIndex.call(dots.children, function (dot) { return dot.classList.contains('is-active'); });
-      updatePreview(image, dots, project, active + (dx < 0 ? 1 : -1));
-    });
-    preview.addEventListener('pointercancel', function () { start = null; });
     return card;
   }
   function makeVideoCard(project, index, visible) {
@@ -158,9 +137,28 @@
     detailLink.hidden = true;
     relatedHeading.textContent = 'More from Prints';
     relatedGrid.replaceChildren();
-    relatedEmpty.hidden = true;
+    var currentGroup = groups.indexOf(project);
+    groups.forEach(function (suggestion, index) {
+      if (index === currentGroup) return;
+      var card = document.createElement('figure');
+      var image = document.createElement('img');
+      card.className = 'work-item print-suggestion-card';
+      card.setAttribute('data-prints-suggestion-index', String(index));
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', 'Open ' + suggestion.title + ' carousel');
+      image.src = suggestion.images[0].src;
+      image.alt = suggestion.images[0].alt;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      card.appendChild(image);
+      relatedGrid.appendChild(card);
+    });
+    relatedEmpty.hidden = relatedGrid.childElementCount > 0;
   }
   function openCarousel(project, index, trigger) {
+    var wasOpen = dialog.open;
+    clearPrintCarousel();
     var viewer = document.createElement('div');
     var controls = document.createElement('div');
     var dots = document.createElement('div');
@@ -222,8 +220,9 @@
     hero.appendChild(viewer);
     hero.appendChild(controls);
     setDetails(project);
-    dialog.showModal();
-    if (trigger) trigger.focus({ preventScroll: true });
+    if (!wasOpen) dialog.showModal();
+    if (!wasOpen && trigger) trigger.focus({ preventScroll: true });
+    else viewer.focus({ preventScroll: true });
   }
   function clearPrintCarousel() {
     var viewer = hero.querySelector('.work-carousel-viewport');
@@ -240,6 +239,8 @@
     setDetails(project);
     detailVideo.play().catch(function () {});
   }
+  var printEmpty = printPanel.querySelector('.work-empty');
+  if (printEmpty) printEmpty.remove();
   order.forEach(function (entry) {
     var panelVisible = printPanel.getAttribute('aria-hidden') === 'false';
     var allCard = entry.type === 'group'
@@ -258,6 +259,14 @@
     }
   });
   function intercept(event) {
+    var suggestionCard = event.target.closest && event.target.closest('[data-prints-suggestion-index]');
+    if (suggestionCard && relatedGrid.contains(suggestionCard)) {
+      if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      openCarousel(groups[Number(suggestionCard.getAttribute('data-prints-suggestion-index'))], Number(suggestionCard.getAttribute('data-prints-suggestion-index')), suggestionCard);
+      return;
+    }
     var videoCard = event.target.closest && event.target.closest('[data-prints-video-index]');
     var carouselCard = event.target.closest && event.target.closest('[data-prints-carousel-index]');
     if (videoCard && gallery.contains(videoCard)) {
@@ -285,5 +294,7 @@
   }
   gallery.addEventListener('click', intercept, true);
   gallery.addEventListener('keydown', intercept, true);
+  relatedGrid.addEventListener('click', intercept, true);
+  relatedGrid.addEventListener('keydown', intercept, true);
   dialog.addEventListener('close', clearPrintCarousel);
 })();
