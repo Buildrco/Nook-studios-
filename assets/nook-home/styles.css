@@ -2222,8 +2222,8 @@ textarea.w-input, textarea.w-select {
 }
 
 .section-hero-wrapper {
-  background-color: #F4E7C1;
-  background-image: linear-gradient(180deg, #F4E7C1 73%, var(--brand-secondary));
+  background-color: #F5F9FB;
+  background-image: linear-gradient(180deg, #F5F9FB 73%, var(--brand-secondary));
   flex-flow: column;
   justify-content: flex-start;
   align-items: center;
@@ -3355,7 +3355,7 @@ textarea.w-input, textarea.w-select {
 
 .question-block {
   border: 1px solid var(--brand-primary);
-  background-color: #f2e3da;
+  background-color: var(--brand-secondary);
   border-top-left-radius: 5em;
   border-top-right-radius: 5em;
   border-bottom-right-radius: 5em;
