@@ -6470,7 +6470,7 @@ textarea.w-input, textarea.w-select {
 
   .ham-navbar {
     z-index: 0;
-    background-color: #f9e2e1f2;
+    background-color: #F5F9FBF2;
     height: 100svh;
     padding-top: 5em;
     padding-right: 1.25em;
@@ -7592,7 +7592,7 @@ textarea.w-input, textarea.w-select {
   }
 
   .ham-navbar {
-    background-color: #f9e2e1f2;
+    background-color: #F5F9FBF2;
     padding-top: 6em;
     display: none;
   }
