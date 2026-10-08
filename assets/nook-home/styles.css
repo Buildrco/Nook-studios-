@@ -188,27 +188,27 @@ td, th {
 }
 
 .w-icon-slider-right:before {
-  content: "";
+  content: "î";
 }
 
 .w-icon-slider-left:before {
-  content: "";
+  content: "î";
 }
 
 .w-icon-nav-menu:before {
-  content: "";
+  content: "î";
 }
 
 .w-icon-arrow-down:before, .w-icon-dropdown-toggle:before {
-  content: "";
+  content: "î";
 }
 
 .w-icon-file-upload-remove:before {
-  content: "";
+  content: "î¤";
 }
 
 .w-icon-file-upload-icon:before {
-  content: "";
+  content: "î¤";
 }
 
 * {
@@ -2222,8 +2222,8 @@ textarea.w-input, textarea.w-select {
 }
 
 .section-hero-wrapper {
-  background-color: #fae3e2;
-  background-image: linear-gradient(180deg, #fae3e2 73%, var(--brand-secondary));
+  background-color: #F4E7C1;
+  background-image: linear-gradient(180deg, #F4E7C1 73%, var(--brand-secondary));
   flex-flow: column;
   justify-content: flex-start;
   align-items: center;
@@ -3433,7 +3433,7 @@ textarea.w-input, textarea.w-select {
 }
 
 .footer-overlay {
-  background-image: linear-gradient(#f7620400, #f76204);
+  background-image: linear-gradient(#2873a200, #2873a2);
   position: absolute;
   inset: 0%;
 }
@@ -6996,7 +6996,7 @@ textarea.w-input, textarea.w-select {
   }
 
   .footer-overlay {
-    background-image: linear-gradient(#f7620400 42%, #f76204);
+    background-image: linear-gradient(#2873a200 42%, #2873a2);
   }
 
   .footer-wrapper {
