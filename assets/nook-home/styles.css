@@ -3341,6 +3341,7 @@ textarea.w-input, textarea.w-select {
 }
 
 .faq-ques {
+  color: #fff;
   border: 0px solid var(--brand-primary);
   width: auto;
   font-family: var(--font-secondary);
@@ -3355,7 +3356,7 @@ textarea.w-input, textarea.w-select {
 
 .question-block {
   border: 1px solid var(--brand-primary);
-  background-color: var(--brand-secondary);
+  background-color: #2873a2;
   border-top-left-radius: 5em;
   border-top-right-radius: 5em;
   border-bottom-right-radius: 5em;
