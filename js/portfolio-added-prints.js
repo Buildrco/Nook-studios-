@@ -41,6 +41,15 @@
     { src: '/images/portfolio/print-banner-printing.mp4', title: 'Banner Printing', teaser: 'A large portrait banner printed with care for a family tribute.', description: 'A family portrait banner comes together on the printer.' },
     { src: '/images/portfolio/print-branded-apparel.mp4', title: 'Branded Apparel Printing', teaser: 'A finished custom printed shirt, ready to wear.', description: 'The finished shirt shows off a clean custom logo print.' }
   ];
+  var printImages = [
+    {
+      title: 'MPhil Real Estate Branded Construction T-Shirt Mockup',
+      teaser: 'A blue branded staff T-shirt for MPhil’s Real Estate.',
+      description: 'A branded apparel mockup for MPhil’s Real Estate, with the company logo and construction, sales and rentals service details on a blue T-shirt.',
+      src: '/images/portfolio/mphils-real-estate-branded-shirt.webp',
+      alt: 'Blue MPhil’s Real Estate branded T-shirt with construction, sales and rentals details.'
+    }
+  ];
   var order = [
     { type: 'group', index: 0 }, { type: 'video', index: 0 },
     { type: 'group', index: 1 }, { type: 'video', index: 1 },
@@ -118,6 +127,27 @@
     video.playsInline = true;
     video.preload = 'metadata';
     card.appendChild(video);
+    return card;
+  }
+  function makeImageCard(project, index) {
+    var card = document.createElement('figure');
+    var image = document.createElement('img');
+    card.className = 'work-item print-image-card';
+    card.setAttribute('data-prints-image-index', String(index));
+    card.setAttribute('data-project-title', project.title);
+    card.setAttribute('data-project-teaser', project.teaser);
+    card.setAttribute('data-project-description', project.description);
+    card.setAttribute('data-work-category', 'prints');
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-haspopup', 'dialog');
+    card.setAttribute('aria-label', 'Open ' + project.title);
+    image.src = project.src;
+    image.alt = project.alt;
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    image.draggable = false;
+    card.appendChild(image);
     return card;
   }
   var playerObserver = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
@@ -260,6 +290,10 @@
       });
     }
   });
+  printImages.forEach(function (project, index) {
+    allGrid.appendChild(makeImageCard(project, index));
+    printGrid.appendChild(makeImageCard(project, index));
+  });
   function intercept(event) {
     var suggestionCard = event.target.closest && event.target.closest('[data-prints-suggestion-index]');
     if (suggestionCard && relatedGrid.contains(suggestionCard)) {
@@ -269,6 +303,16 @@
       var suggestionIndex = Number(suggestionCard.getAttribute('data-prints-suggestion-index'));
       if (suggestionCard.getAttribute('data-prints-suggestion-kind') === 'video') openVideo(suggestionIndex, suggestionCard);
       else openCarousel(groups[suggestionIndex], suggestionIndex, suggestionCard);
+      return;
+    }
+    var imageCard = event.target.closest && event.target.closest('[data-prints-image-index]');
+    if (imageCard && gallery.contains(imageCard)) {
+      if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      clearPrintCarousel();
+      hero.classList.remove('has-branding-carousel');
+      if (window.__openPortfolioDetail) window.__openPortfolioDetail(imageCard, 'prints');
       return;
     }
     var videoCard = event.target.closest && event.target.closest('[data-prints-video-index]');
