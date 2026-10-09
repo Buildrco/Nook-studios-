@@ -77,6 +77,14 @@
 
   function start() {
     if (!document.body) return;
+    var authoredFooter = document.querySelector("footer");
+    if (
+      authoredFooter &&
+      (authoredFooter.querySelector(".footer-heading") ||
+        authoredFooter.textContent.indexOf("Okay, that's enough website") !== -1)
+    ) {
+      return;
+    }
     if (!document.getElementById("nook-unified-footer-styles")) {
       var style = document.createElement("style");
       style.id = "nook-unified-footer-styles";
