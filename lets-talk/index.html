@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nook Studios | Let’s Talk</title>
 <link rel="stylesheet" href="/assets/nook-home/styles.css">
-<style id="nook-header-scroll">.header{transition:transform .58s cubic-bezier(.22,1,.36,1),opacity .44s ease;will-change:transform,opacity}.header.nook-header-scroll-hidden{transform:translate3d(0,-120%,0)!important;opacity:0;pointer-events:none}@media(prefers-reduced-motion:reduce){.header{transition:none!important;will-change:auto}}</style></head>
+</head>
 <body>
 <div class="contact-page"><div class="contact-navbar"><div class="navbar-logo-contact"><div class="logo-svg nook-wordmark" role="img" aria-label="Nook Studios"><span>Nook</span><span>Studios</span></div></div><div class="close-btn-wrapper"><a class="close-btn w-inline-block" href="/our-work/"><div class="back-arrow w-embed"><svg fill="none" height="auto" viewbox="0 0 8 8" width="100%" xmlns="http://www.w3.org/2000/svg">
 <path d="M6.86328 0.5L0.499281 6.864M6.86328 6.864L0.499281 0.5" stroke="black" stroke-linecap="round"></path>
@@ -906,4 +906,4 @@
 <script src="/assets/nook-home/js/CustomBounce.min.js"></script>
 <script>gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,CustomEase,CustomBounce);</script>
 <script src="/assets/nook-home/js/lenis.min.js"></script>
-<script id="nook-header-scroll-script">(function(){var header=document.querySelector("header.header");if(!header)return;var page=document.querySelector(".page"),last=0,down=0,up=0,queued=false;function pos(){return Math.max(page?page.scrollTop:0,window.scrollY||document.documentElement.scrollTop||0)}last=pos();function update(){var y=pos(),d=y-last,open=!!header.querySelector('[aria-expanded="true"],.w--open');if(y<28||d<0&&up+(-d)>=8||header.contains(document.activeElement)||open){header.classList.remove("nook-header-scroll-hidden");up=0;down=0}else if(d>0){down+=d;up=0;if(down>=10)header.classList.add("nook-header-scroll-hidden")}else if(d<0){up-=d;down=0;if(up>=8)header.classList.remove("nook-header-scroll-hidden")}last=y;queued=false}function onScroll(){if(queued)return;queued=true;window.requestAnimationFrame(update)}window.addEventListener("scroll",onScroll,{passive:true});if(page)page.addEventListener("scroll",onScroll,{passive:true});header.addEventListener("focusin",function(){header.classList.remove("nook-header-scroll-hidden")})})();</script></body></html>
+</body></html>
