@@ -821,7 +821,7 @@
 </div></div><div class="contact-page-html w-embed w-script"><!-- ======================================================= -->
 <!-- Nook — CONTACT PAGE OVERLAY & MODAL TRANSITION       -->
 <!-- Paste in Webflow HTML Embed inside .contact-page          -->
-<!-- or in Page Settings (Before <script id="nook-header-scroll-script">(function(){var header=document.querySelector("header.header");if(!header)return;var page=document.querySelector(".page"),last=0,down=0,up=0,queued=false;function pos(){return Math.max(page?page.scrollTop:0,window.scrollY||document.documentElement.scrollTop||0)}last=pos();function update(){var y=pos(),d=y-last,open=!!header.querySelector('[aria-expanded="true"],.w--open');if(y<28||d<0&&up+(-d)>=8||header.contains(document.activeElement)||open){header.classList.remove("nook-header-scroll-hidden");up=0;down=0}else if(d>0){down+=d;up=0;if(down>=10)header.classList.add("nook-header-scroll-hidden")}else if(d<0){up-=d;down=0;if(up>=8)header.classList.remove("nook-header-scroll-hidden")}last=y;queued=false}function onScroll(){if(queued)return;queued=true;window.requestAnimationFrame(update)}window.addEventListener("scroll",onScroll,{passive:true});if(page)page.addEventListener("scroll",onScroll,{passive:true});header.addEventListener("focusin",function(){header.classList.remove("nook-header-scroll-hidden")})})();</script></body>)                       -->
+<!-- or in Page Settings (Before </body>)                       -->
 <!-- -->
 <!-- Webflow Hierarchy Required:                               -->
 <!-- contact-page (fixed full-screen overlay)                  -->
@@ -5033,4 +5033,4 @@
 <script src="/assets/nook-home/js/CustomBounce.min.js"></script>
 <script>gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,CustomEase,CustomBounce);</script>
 <script src="/assets/nook-home/js/lenis.min.js"></script>
-</body></html>
+<script id="nook-header-scroll-script">(function(){var header=document.querySelector("header.header");if(!header)return;var page=document.querySelector(".page"),last=0,down=0,up=0,queued=false;function pos(){return Math.max(page?page.scrollTop:0,window.scrollY||document.documentElement.scrollTop||0)}last=pos();function update(){var y=pos(),d=y-last,open=!!header.querySelector('[aria-expanded="true"],.w--open');if(y<28||d<0&&up+(-d)>=8||header.contains(document.activeElement)||open){header.classList.remove("nook-header-scroll-hidden");up=0;down=0}else if(d>0){down+=d;up=0;if(down>=10)header.classList.add("nook-header-scroll-hidden")}else if(d<0){up-=d;down=0;if(up>=8)header.classList.remove("nook-header-scroll-hidden")}last=y;queued=false}function onScroll(){if(queued)return;queued=true;window.requestAnimationFrame(update)}window.addEventListener("scroll",onScroll,{passive:true});if(page)page.addEventListener("scroll",onScroll,{passive:true});header.addEventListener("focusin",function(){header.classList.remove("nook-header-scroll-hidden")})})();</script></body></html>
