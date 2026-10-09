@@ -8813,18 +8813,17 @@ textarea.w-input, textarea.w-select {
   </svg>
 </div>
 </div></div></div><div class="ham-navbar"><div class="ham-navbar-html w-embed w-script"><!-- ======================================================= -->
-<!-- TWO 26 — COMPLETE MOBILE NAVBAR + MORPHING TOGGLE ICON    -->
+<!-- Nook — COMPLETE MOBILE NAVBAR + MORPHING TOGGLE ICON    -->
 <!-- Webflow Hierarchy:                                        -->
 <!-- navbar                                                    -->
 <!--   └── nook-nav-toggle-btn (Embed containing the SVG)     -->
-<!--                                                           -->
+<!-- -->
 <!-- ham-navbar (Fixed overlay menu <= 768px)                  -->
 <!--   └── hamburger-links                                     -->
 <!--         ├── navbar-link-btn (Link 1)                      -->
 <!--         ├── navbar-link-btn (Link 2)                      -->
 <!--         └── ham-cta (CTA Button)                          -->
 <!-- ======================================================= -->
-
 <!-- Functional & Layout CSS -->
 <style>
   /* Base state: strictly fixed and removed from DOM flow so it never occupies space */
@@ -8838,11 +8837,11 @@ textarea.w-input, textarea.w-select {
     width: 100vw !important;
     width: 100svw !important;
     height: 100vh !important;
-    height: 100svh !important;
+    height: 100svh !important; height: 100dvh !important;
     background-color: rgba(245, 249, 251, 0.95) !important;
     opacity: 0;
     pointer-events: none;
-    overflow-y: hidden !important;
+    overflow-y: auto !important; overscroll-behavior: contain !important; -webkit-overflow-scrolling: touch !important;
     overflow-x: hidden !important;
     margin: 0 !important;
   }
@@ -8871,7 +8870,6 @@ textarea.w-input, textarea.w-select {
     }
   }
 </style>
-
 <script>
   (function () {
     function initNookMobileSystem() {
@@ -9067,7 +9065,7 @@ textarea.w-input, textarea.w-select {
                   scale: 1,
                   rotation: 0,
                   duration: 0.75,
-                  ease: "back.out(2.2)", // Signature TWO 26 spring bounce
+                  ease: "back.out(2.2)", // Signature Nook spring bounce
                 },
                 0.15 + index * 0.09,
               );
@@ -9191,144 +9189,29 @@ textarea.w-input, textarea.w-select {
     }
   })();
 </script>
-</div><div class="hamburger-links"><a href="/our-work/" class="navbar-link-btn w-inline-block"><div class="navlink-text">Our Work</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg width="100%" height="100%" viewBox="0 0 75 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-width="24" stroke-linecap="round"></path>
+</div><div class="hamburger-links"><a class="navbar-link-btn w-inline-block" href="/our-work/"><div class="navlink-text">Our Work</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
 </svg>
-</div></div><div class="nav-link-btn-svg-draw-code w-embed w-script"><script>
-  (function () {
-    function initNavbarBtns() {
-      if (typeof gsap === 'undefined') return;
-
-      if (typeof DrawSVGPlugin !== 'undefined') {
-        gsap.registerPlugin(DrawSVGPlugin);
-      }
-
-      const buttons = document.querySelectorAll('.navbar-link-btn');
-
-      buttons.forEach((btn) => {
-        const svgs = btn.querySelectorAll('svg');
-        svgs.forEach((svg) => {
-          svg.style.overflow = 'visible';
-          svg.style.width = '100%';
-          svg.style.height = '100%';
-        });
-
-        const paths = btn.querySelectorAll('.stroke-fill path, .stroke-fill-code path, svg path');
-        if (!paths.length) return;
-
-        const strokeFill = btn.querySelector('.stroke-fill');
-        if (strokeFill) strokeFill.style.pointerEvents = 'none';
-
-        paths.forEach((path) => {
-          path.style.strokeLinecap = 'round';
-          path.style.strokeLinejoin = 'round';
-
-          const targetStrokeWidth = parseFloat(path.getAttribute('stroke-width')) || 36;
-
-          gsap.set(path, {
-            drawSVG: '0%',
-            strokeWidth: 0,
-          });
-
-          const tl = gsap.timeline({
-            paused: true,
-            defaults: { ease: 'power1.inOut' },
-          });
-
-          tl.to(path, {
-            drawSVG: '100%',
-            strokeWidth: targetStrokeWidth,
-            duration: 0.5,
-          });
-
-          btn.addEventListener('mouseenter', () => tl.timeScale(1).play());
-          btn.addEventListener('mouseleave', () => tl.timeScale(1.4).reverse());
-        });
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initNavbarBtns);
-    } else {
-      initNavbarBtns();
-    }
-  })();
-</script></div></a><a href="/about/" aria-current="page" class="navbar-link-btn w-inline-block w--current"><div class="navlink-text">About Us</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg width="100%" height="100%" viewBox="0 0 75 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-width="24" stroke-linecap="round"></path>
+</div></div></a><a class="navbar-link-btn w-inline-block w--current" href="/about/" aria-current="page"><div class="navlink-text">About Us</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
 </svg>
-</div></div><div class="nav-link-btn-svg-draw-code w-embed w-script"><script>
-  (function () {
-    function initNavbarBtns() {
-      if (typeof gsap === 'undefined') return;
-
-      if (typeof DrawSVGPlugin !== 'undefined') {
-        gsap.registerPlugin(DrawSVGPlugin);
-      }
-
-      const buttons = document.querySelectorAll('.navbar-link-btn');
-
-      buttons.forEach((btn) => {
-        const svgs = btn.querySelectorAll('svg');
-        svgs.forEach((svg) => {
-          svg.style.overflow = 'visible';
-          svg.style.width = '100%';
-          svg.style.height = '100%';
-        });
-
-        const paths = btn.querySelectorAll('.stroke-fill path, .stroke-fill-code path, svg path');
-        if (!paths.length) return;
-
-        const strokeFill = btn.querySelector('.stroke-fill');
-        if (strokeFill) strokeFill.style.pointerEvents = 'none';
-
-        paths.forEach((path) => {
-          path.style.strokeLinecap = 'round';
-          path.style.strokeLinejoin = 'round';
-
-          const targetStrokeWidth = parseFloat(path.getAttribute('stroke-width')) || 36;
-
-          gsap.set(path, {
-            drawSVG: '0%',
-            strokeWidth: 0,
-          });
-
-          const tl = gsap.timeline({
-            paused: true,
-            defaults: { ease: 'power1.inOut' },
-          });
-
-          tl.to(path, {
-            drawSVG: '100%',
-            strokeWidth: targetStrokeWidth,
-            duration: 0.5,
-          });
-
-          btn.addEventListener('mouseenter', () => tl.timeScale(1).play());
-          btn.addEventListener('mouseleave', () => tl.timeScale(1.4).reverse());
-        });
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initNavbarBtns);
-    } else {
-      initNavbarBtns();
-    }
-  })();
-</script><a class="navbar-link-btn w-inline-block" href="/shop/"><div class="navlink-text">Shop</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
+</div></div></a><a class="navbar-link-btn w-inline-block" href="/shop/"><div class="navlink-text">Shop</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
 </svg>
 </div></div></a><a class="navbar-link-btn w-inline-block" href="/code-library/"><div class="navlink-text">Code Library</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
 </svg>
-</div></div></a></div><div class="ham-cta"><a data-wf--cta-btn--variant="base" href="#" class="cta-btn w-inline-block"><div class="cta-text">Let's Talk</div><div class="cta-btn-arrow"><div class="svg-arrow-cta w-embed"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+</div></div></a><a class="navbar-link-btn w-inline-block" href="/#contact"><div class="navlink-text">Contact Us</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
+</svg>
+</div></div></a><div class="ham-cta"><a class="cta-btn w-inline-block" data-wf--cta-btn--variant="base" href="#"><div class="cta-text">Let's Talk</div><div class="cta-btn-arrow"><div class="svg-arrow-cta w-embed"><svg fill="none" height="10" viewbox="0 0 10 10" width="10" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_190_472)">
 <path d="M1.46439 8.53621L8.53546 1.46515M3.05538 1.28837L8.53546 1.46515L8.71223 6.94522" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
 </g>
 <defs>
-<clipPath id="clip0_190_472">
-<rect width="10" height="10" fill="currentColor" transform="translate(10) rotate(90)"></rect>
-</clipPath>
+<clippath id="clip0_190_472">
+<rect fill="currentColor" height="10" transform="translate(10) rotate(90)" width="10"></rect>
+</clippath>
 </defs>
 </svg>
 </div></div><div class="cta-btn-fill-hover"></div><div class="cta-btn-code w-embed w-script"><script>
