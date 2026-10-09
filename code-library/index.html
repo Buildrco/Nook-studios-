@@ -1631,6 +1631,6 @@ function createCard(item){var cardKey=keyFor(item);if(state.cardNodes.has(cardKe
   dialog.addEventListener("close",function(){previewSurface.replaceChildren();previewSurface.dataset.previewState="";delete dialog.dataset.activeTab;if(window.location.hash.indexOf("#component=")===0)window.history.replaceState(null,"",window.location.pathname+window.location.search);});
   window.addEventListener("popstate",function(){var details=readDetailHash();if(details){resolveHash();}else if(dialog.open){dialog.close();}});
   loadEntries();resolveHash();
-})();</script><script src="/assets/nook-home/js/gsap.min.js"></script>
+})();</script><script src="/assets/nook-home/js/gsap.min.js"></script><script src="/assets/nook-home/js/SplitText.min.js" defer></script><script src="/assets/nook-home/js/ScrollTrigger.min.js" defer></script>
 <script src="/assets/nook-home/js/DrawSVGPlugin.min.js"></script>
 </body></html>
