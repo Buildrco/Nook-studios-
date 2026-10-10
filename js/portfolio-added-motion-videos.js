@@ -2,6 +2,8 @@
   "use strict";
   var projects=[
     {category:"motion-graphics",title:"Motion Graphics/Animation — Project 2",teaser:"Motion graphics and animation portfolio video.",description:"Motion graphics and animation work from Nook Studios.",src:"/images/motion/2.....mp4"},
+    {category:"motion-graphics",title:"Motion Graphics/Animation — October 1, 2026",teaser:"Motion graphics and animation portfolio video.",description:"Motion graphics and animation work from Nook Studios.",src:"/images/motion/2026-10-01-011035676.mp4"},
+    {category:"motion-graphics",title:"Motion Graphics/Animation — October 10, 2026",teaser:"Motion graphics and animation portfolio video.",description:"Motion graphics and animation work from Nook Studios.",src:"/images/motion/lv_0_20261010020622.mp4"},
     {category:"video-production",title:"Video Production — Project 1",teaser:"Video production portfolio project.",description:"Video production work from Nook Studios.",src:"/images/motion/e2b6364cbe523164a51b026d0d357358_720w.mp4"},
     {category:"video-production",title:"Video Production — Project 2",teaser:"Video production portfolio project.",description:"Video production work from Nook Studios.",src:"/images/motion/lv_0_20261010020323.mp4"}
   ];
