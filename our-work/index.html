@@ -79,6 +79,8 @@
 .work-story-viewer:not([hidden]){opacity:1;visibility:visible}
 .work-story-stage{position:relative;width:min(420px,calc(92dvh * 9 / 16),calc(100vw - 24px));aspect-ratio:9/16;max-height:92dvh;overflow:hidden;border-radius:18px;background:#101114;box-shadow:0 24px 90px rgba(0,0,0,.4);isolation:isolate}
 .work-story-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#101114}
+.work-story-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#101114}
+.work-story-video[hidden],.work-story-image[hidden]{display:none!important}
 .work-story-progress{position:absolute;z-index:4;top:12px;left:12px;right:12px;display:flex;gap:4px}
 .work-story-progress-segment{position:relative;flex:1;height:2px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.36)}
 .work-story-progress-fill{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left center;will-change:transform}
@@ -891,7 +893,7 @@
 </script>
 </div></a></div></div></div></nav></header><main class="page-shell work-page"><section class="work-heading work-hero" aria-labelledby="work-hero-title"><div class="work-hero-title"><h1 id="work-hero-title"><span>A FEW</span><span>PROJECTS</span><span>TO BRAG ABOUT</span></h1><span class="work-hero-tag work-hero-tag-first">Just a few</span><span class="work-hero-tag work-hero-tag-second">Kind of proud</span></div><div class="work-hero-bottom"><img class="work-hero-illustration" src="/images/work-hero-illustration.webp" alt="" width="1200" height="688" loading="eager" decoding="async" fetchpriority="high"><p class="work-hero-copy">Brands, websites and ideas brought to life—with care in every detail.</p></div></section><section class="work-stories" aria-label="Studio story highlights">
   <button class="work-story-card" type="button" data-story-highlight="0" aria-label="Open Tech Excerpts highlight">
-    <span class="work-story-cover-ring"><img class="work-story-cover" src="/our-work/stories/tech-excerpts.webp" alt="" width="72" height="72" loading="lazy" decoding="async"></span>
+    <span class="work-story-cover-ring"><video class="work-story-cover" src="/our-work/stories/tech-excerpts-01.mp4" width="72" height="72" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video></span>
     <span>Tech Excerpts</span>
   </button>
   <button class="work-story-card" type="button" data-story-highlight="1" aria-label="Open Behind the Scenes highlight">
@@ -902,6 +904,7 @@
 <div class="work-story-viewer" id="work-story-viewer" role="dialog" aria-modal="true" aria-label="Studio stories" aria-hidden="true" hidden>
   <div class="work-story-stage">
     <video class="work-story-video" playsinline preload="none"></video>
+    <img class="work-story-image" alt="" hidden>
     <div class="work-story-progress" aria-hidden="true"></div>
     <div class="work-story-topline"><span class="work-story-date"></span><button class="work-story-close" type="button" aria-label="Close stories">×</button></div>
     <button class="work-story-hit work-story-hit-prev" type="button" aria-label="Previous story"></button>
@@ -912,32 +915,38 @@
 (function(){
   const highlights=[
     {title:"Tech Excerpts",items:[
-      {src:"/our-work/stories/tech-excerpts-01.mp4",date:"20/03/2026"},
-      {src:"/our-work/stories/tech-excerpts-02.mp4",date:"29/03/2026"},
-      {src:"/our-work/stories/tech-excerpts-03.mp4",date:"11/04/2026"},
-      {src:"/our-work/stories/tech-excerpts-04.mp4",date:"25/04/2026"},
-      {src:"/our-work/stories/tech-excerpts-05.mp4",date:"12/05/2026"}
+      {type:"video",src:"/our-work/stories/tech-excerpts-01.mp4",date:"20/03/2026"},
+      {type:"video",src:"/our-work/stories/tech-excerpts-02.mp4",date:"29/03/2026"},
+      {type:"video",src:"/our-work/stories/tech-excerpts-03.mp4",date:"11/04/2026"},
+      {type:"video",src:"/our-work/stories/tech-excerpts-04.mp4",date:"25/04/2026"},
+      {type:"video",src:"/our-work/stories/tech-excerpts-05.mp4",date:"12/05/2026"}
     ]},
     {title:"Behind the Scenes",items:[
-      {src:"/our-work/stories/behind-the-scenes-01.mp4",date:"08/06/2025"},
-      {src:"/our-work/stories/behind-the-scenes-02.mp4",date:"19/09/2025"},
-      {src:"/our-work/stories/behind-the-scenes-03.mp4",date:"22/12/2025"}
+      {type:"image",src:"/our-work/stories/behind-the-scenes.webp",date:"04/05/2025"},
+      {type:"video",src:"/our-work/stories/behind-the-scenes-01.mp4",date:"08/06/2025"},
+      {type:"image",src:"/our-work/stories/tech-excerpts.webp",date:"15/08/2025"},
+      {type:"video",src:"/our-work/stories/behind-the-scenes-02.mp4",date:"19/09/2025"},
+      {type:"video",src:"/our-work/stories/behind-the-scenes-03.mp4",date:"22/12/2025"}
     ]}
   ];
   const viewer=document.getElementById("work-story-viewer");
   const stage=viewer&&viewer.querySelector(".work-story-stage");
   const video=viewer&&viewer.querySelector(".work-story-video");
+  const storyImage=viewer&&viewer.querySelector(".work-story-image");
   const progress=viewer&&viewer.querySelector(".work-story-progress");
   const dateLabel=viewer&&viewer.querySelector(".work-story-date");
-  if(!viewer||!video)return;
-  let groupIndex=0,storyIndex=0;
+  if(!viewer||!video||!storyImage)return;
+  let groupIndex=0,storyIndex=0,imageTimer=0,imageStartedAt=0,imageProgress=0;
+  const IMAGE_DURATION=5000;
   const gsap=window.gsap;
   const nextVideo=document.createElement("video");
   nextVideo.preload="auto";nextVideo.muted=true;nextVideo.playsInline=true;
   function active(){return highlights[groupIndex]}
+  function clearImageTimer(){if(imageTimer){window.clearInterval(imageTimer);imageTimer=0;}imageStartedAt=0;}
   function fillProgress(){
     const fills=progress.querySelectorAll(".work-story-progress-fill");
-    const ratio=video.duration?Math.min(1,video.currentTime/video.duration):0;
+    const current=active().items[storyIndex];
+    const ratio=current.type==="image"?imageProgress:(video.duration?Math.min(1,video.currentTime/video.duration):0);
     fills.forEach((fill,i)=>{
       const value=i<storyIndex?1:(i===storyIndex?ratio:0);
       if(gsap)gsap.set(fill,{scaleX:value});else fill.style.transform="scaleX("+value+")";
@@ -954,16 +963,33 @@
   }
   function warmNext(){
     const item=active().items[storyIndex+1];
-    if(item){nextVideo.src=item.src;nextVideo.load();}
+    if(item&&item.type==="video"){nextVideo.src=item.src;nextVideo.load();}
     else{nextVideo.removeAttribute("src");nextVideo.load();}
+  }
+  function startImageProgress(){
+    if(imageTimer)return;
+    imageStartedAt=performance.now();
+    imageTimer=window.setInterval(()=>{
+      imageProgress=Math.min(1,(performance.now()-imageStartedAt)/IMAGE_DURATION);
+      fillProgress();
+      if(imageProgress>=1){clearImageTimer();showStory(storyIndex+1);}
+    },50);
   }
   function showStory(nextIndex){
     if(nextIndex<0){closeViewer();return;}
     if(nextIndex>=active().items.length){closeViewer();return;}
-    storyIndex=nextIndex;const item=active().items[storyIndex];
-    video.pause();video.src=item.src;video.preload="auto";video.muted=false;video.load();
+    clearImageTimer();imageProgress=0;storyIndex=nextIndex;const item=active().items[storyIndex];
     dateLabel.textContent=item.date;viewer.setAttribute("aria-label",active().title+" story");
     drawProgress();warmNext();
+    if(item.type==="image"){
+      video.pause();video.removeAttribute("src");video.load();video.hidden=true;
+      storyImage.hidden=false;storyImage.onload=startImageProgress;storyImage.src=item.src;
+      if(storyImage.complete)startImageProgress();
+      if(gsap)gsap.fromTo(storyImage,{autoAlpha:.68,scale:1.015},{autoAlpha:1,scale:1,duration:.3,ease:"power2.out",overwrite:true});
+      return;
+    }
+    storyImage.onload=null;storyImage.hidden=true;storyImage.removeAttribute("src");video.hidden=false;
+    video.pause();video.src=item.src;video.preload="auto";video.muted=false;video.load();
     if(gsap)gsap.fromTo(video,{autoAlpha:.68,scale:1.015},{autoAlpha:1,scale:1,duration:.3,ease:"power2.out",overwrite:true});
     const playback=video.play();
     if(playback&&typeof playback.catch==="function")playback.catch(()=>{video.muted=true;video.play().catch(()=>{});});
@@ -976,7 +1002,8 @@
   }
   function closeViewer(){
     if(viewer.hidden)return;
-    const finish=()=>{video.pause();video.removeAttribute("src");video.load();nextVideo.removeAttribute("src");nextVideo.load();viewer.hidden=true;viewer.setAttribute("aria-hidden","true");document.body.classList.remove("work-story-open");};
+    clearImageTimer();
+    const finish=()=>{video.pause();video.removeAttribute("src");video.load();storyImage.onload=null;storyImage.removeAttribute("src");storyImage.hidden=true;video.hidden=false;nextVideo.removeAttribute("src");nextVideo.load();viewer.hidden=true;viewer.setAttribute("aria-hidden","true");document.body.classList.remove("work-story-open");};
     if(gsap)gsap.to(viewer,{autoAlpha:0,duration:.2,ease:"power1.in",onComplete:finish});else finish();
   }
   video.addEventListener("timeupdate",fillProgress);
@@ -994,7 +1021,7 @@
   });
   const cards=document.querySelectorAll(".work-story-card .work-story-cover-ring");
   if(gsap&&cards.length){
-    gsap.fromTo(cards,{y:14,scale:.94,autoAlpha:0},{y:0,scale:1,autoAlpha:1,duration:.58,ease:"power3.out",stagger:.1,delay:.08});
+    gsap.fromTo(cards,{y:14,scale:.94,autoAlpha:0},{y:0,scale:1,duration:.58,ease:"power3.out",stagger:.1,delay:.08});
     cards.forEach(ring=>{const card=ring.closest(".work-story-card");card.addEventListener("mouseenter",()=>gsap.to(ring,{scale:1.06,duration:.28,ease:"power2.out",overwrite:true}));card.addEventListener("mouseleave",()=>gsap.to(ring,{scale:1,duration:.3,ease:"power2.out",overwrite:true}));});
   }
 })();
