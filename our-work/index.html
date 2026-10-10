@@ -903,7 +903,7 @@
 </section>
 <div class="work-story-viewer" id="work-story-viewer" role="dialog" aria-modal="true" aria-label="Studio stories" aria-hidden="true" hidden>
   <div class="work-story-stage">
-    <video class="work-story-video" playsinline preload="none"></video>
+    <video class="work-story-video" playsinline autoplay muted preload="none"></video>
     <img class="work-story-image" alt="" hidden>
     <div class="work-story-progress" aria-hidden="true"></div>
     <div class="work-story-topline"><span class="work-story-date"></span><button class="work-story-close" type="button" aria-label="Close stories">×</button></div>
@@ -915,16 +915,16 @@
 (function(){
   const highlights=[
     {title:"Tech Excerpts",items:[
-      {type:"video",src:"/our-work/stories/tech-excerpts-01.mp4",date:"20/03/2026"},
-      {type:"video",src:"/our-work/stories/tech-excerpts-02.mp4",date:"29/03/2026"},
-      {type:"video",src:"/our-work/stories/tech-excerpts-03.mp4",date:"11/04/2026"},
-      {type:"video",src:"/our-work/stories/tech-excerpts-04.mp4",date:"25/04/2026"},
-      {type:"video",src:"/our-work/stories/tech-excerpts-05.mp4",date:"12/05/2026"}
+      {type:"video",src:"/our-work/stories/tech-excerpts-01.mp4",poster:"/our-work/stories/tech-excerpts-01-poster.jpg",date:"20/03/2026"},
+      {type:"video",src:"/our-work/stories/tech-excerpts-02.mp4",poster:"/our-work/stories/tech-excerpts-02-poster.jpg",date:"29/03/2026"},
+      {type:"video",src:"/our-work/stories/tech-excerpts-03.mp4",poster:"/our-work/stories/tech-excerpts-03-poster.jpg",date:"11/04/2026"},
+      {type:"video",src:"/our-work/stories/tech-excerpts-04.mp4",poster:"/our-work/stories/tech-excerpts-04-poster.jpg",date:"25/04/2026"},
+      {type:"video",src:"/our-work/stories/tech-excerpts-05.mp4",poster:"/our-work/stories/tech-excerpts-05-poster.jpg",date:"12/05/2026"}
     ]},
     {title:"Behind the Scenes",items:[
-      {type:"video",src:"/our-work/stories/behind-the-scenes-01.mp4",date:"08/06/2025"},
-      {type:"video",src:"/our-work/stories/behind-the-scenes-02.mp4",date:"19/09/2025"},
-      {type:"video",src:"/our-work/stories/behind-the-scenes-03.mp4",date:"22/12/2025"},
+      {type:"video",src:"/our-work/stories/behind-the-scenes-01.mp4",poster:"/our-work/stories/behind-the-scenes-01-poster.jpg",date:"08/06/2025"},
+      {type:"video",src:"/our-work/stories/behind-the-scenes-02.mp4",poster:"/our-work/stories/behind-the-scenes-02-poster.jpg",date:"19/09/2025"},
+      {type:"video",src:"/our-work/stories/behind-the-scenes-03.mp4",poster:"/our-work/stories/behind-the-scenes-03-poster.jpg",date:"22/12/2025"},
       {type:"image",src:"/our-work/stories/behind-the-scenes.webp",date:"04/05/2025"},
       {type:"image",src:"/our-work/stories/tech-excerpts.webp",date:"15/08/2025"}
     ]}
@@ -989,7 +989,7 @@
       return;
     }
     storyImage.onload=null;storyImage.hidden=true;storyImage.removeAttribute("src");video.hidden=false;
-    video.pause();video.src=item.src;video.preload="auto";video.muted=false;video.load();
+    video.pause();video.autoplay=true;video.playsInline=true;video.muted=true;video.preload="auto";video.poster=item.poster||"";video.src=item.src;video.load();
     if(gsap)gsap.fromTo(video,{autoAlpha:.68,scale:1.015},{autoAlpha:1,scale:1,duration:.3,ease:"power2.out",overwrite:true});
     const playback=video.play();
     if(playback&&typeof playback.catch==="function")playback.catch(()=>{video.muted=true;video.play().catch(()=>{});});
