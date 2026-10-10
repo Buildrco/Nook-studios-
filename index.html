@@ -79,9 +79,6 @@
 </div></div></a><a class="navbar-link-btn w-inline-block" href="/code-library/"><div class="navlink-text">Code Library</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
 </svg>
-</div></div></a><a class="navbar-link-btn w-inline-block" href="/#contact"><div class="navlink-text">Contact Us</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
-<path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
-</svg>
 </div></div></a><a class="navbar-link-btn w-inline-block" href="/lets-talk/"><div class="navlink-text">Let&#x27;s Talk</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
 </svg>
@@ -668,9 +665,6 @@
 </div></div></a><a class="navbar-link-btn w-inline-block" href="/code-library/"><div class="navlink-text">Code Library</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
 </svg>
-</div></div></a><a class="navbar-link-btn w-inline-block" href="/#contact"><div class="navlink-text">Contact Us</div><div class="stroke-fill"><div class="stroke-fill-code w-embed"><svg fill="none" height="100%" viewbox="0 0 75 36" width="100%" xmlns="http://www.w3.org/2000/svg">
-<path d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753" stroke="currentColor" stroke-linecap="round" stroke-width="24"></path>
-</svg>
 </div></div></a><div class="ham-cta"><a class="cta-btn w-inline-block" data-wf--cta-btn--variant="base" href="#"><div class="cta-text">Let's Talk</div><div class="cta-btn-arrow"><div class="svg-arrow-cta w-embed"><svg fill="none" height="10" viewbox="0 0 10 10" width="10" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_190_472)">
 <path d="M1.46439 8.53621L8.53546 1.46515M3.05538 1.28837L8.53546 1.46515L8.71223 6.94522" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -1050,6 +1044,8 @@
       );
 
       let isOpen = false;
+      let isClosing = false;
+      let previousBodyOverflow = "";
       let openTl = null;
 
       // -----------------------------------------------------------------
@@ -1346,8 +1342,13 @@
       // 4. Open Timeline Execution (Slow, Silky Pace + 1600px strokeWidth)
       // -----------------------------------------------------------------
       function openContactModal() {
-        if (isOpen) return;
+        if (isOpen) {
+          document.body.style.overflow = "hidden";
+          return;
+        }
         isOpen = true;
+        previousBodyOverflow = document.body.style.overflow === "hidden" ? "" : document.body.style.overflow;
+        document.body.style.overflow = "hidden";
 
         // Display modal overlay
         contactPage.classList.add("is-active");
@@ -1559,7 +1560,8 @@
       // 5. Close Timeline Execution
       // -----------------------------------------------------------------
       function closeContactModal() {
-        if (!isOpen) return;
+        if (!isOpen || isClosing) return;
+        isClosing = true;
 
         if (openTl) openTl.kill();
 
@@ -1569,7 +1571,9 @@
             contactPage.style.display = "none";
             contactPage.style.visibility = "hidden";
             contactPage.style.pointerEvents = "none";
+            document.body.style.overflow = previousBodyOverflow;
             isOpen = false;
+            isClosing = false;
             resetModalElements();
           },
         });
@@ -1645,6 +1649,7 @@
       if (closeBtn) {
         closeBtn.addEventListener("click", (e) => {
           e.preventDefault();
+          e.stopPropagation();
           closeContactModal();
         });
       }
