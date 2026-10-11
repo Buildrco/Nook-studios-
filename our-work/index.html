@@ -81,6 +81,9 @@
 .work-story-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#101114}
 .work-story-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#101114}
 .work-story-video[hidden],.work-story-image[hidden]{display:none!important}
+.work-story-loading{position:absolute;z-index:2;top:50%;left:50%;width:34px;height:34px;margin:-17px;border:3px solid rgba(255,255,255,.32);border-top-color:#fff;border-radius:50%;animation:work-story-loading-spin .8s linear infinite;pointer-events:none}
+.work-story-loading[hidden]{display:none!important}
+@keyframes work-story-loading-spin{to{transform:rotate(360deg)}}
 .work-story-progress{position:absolute;z-index:4;top:12px;left:12px;right:12px;display:flex;gap:4px}
 .work-story-progress-segment{position:relative;flex:1;height:2px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.36)}
 .work-story-progress-fill{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left center;will-change:transform}
@@ -903,8 +906,9 @@
 </section>
 <div class="work-story-viewer" id="work-story-viewer" role="dialog" aria-modal="true" aria-label="Studio stories" aria-hidden="true" hidden>
   <div class="work-story-stage">
-    <video class="work-story-video" playsinline autoplay muted preload="none"></video>
+    <video class="work-story-video" playsinline autoplay preload="none"></video>
     <img class="work-story-image" alt="" hidden>
+    <div class="work-story-loading" aria-hidden="true" hidden></div>
     <div class="work-story-progress" aria-hidden="true"></div>
     <div class="work-story-topline"><span class="work-story-date"></span><button class="work-story-close" type="button" aria-label="Close stories">×</button></div>
     <button class="work-story-hit work-story-hit-prev" type="button" aria-label="Previous story"></button>
@@ -933,14 +937,15 @@
   const stage=viewer&&viewer.querySelector(".work-story-stage");
   const video=viewer&&viewer.querySelector(".work-story-video");
   const storyImage=viewer&&viewer.querySelector(".work-story-image");
+  const loading=viewer&&viewer.querySelector(".work-story-loading");
   const progress=viewer&&viewer.querySelector(".work-story-progress");
   const dateLabel=viewer&&viewer.querySelector(".work-story-date");
-  if(!viewer||!video||!storyImage)return;
+  if(!viewer||!video||!storyImage||!loading)return;
   let groupIndex=0,storyIndex=0,imageTimer=0,imageStartedAt=0,imageProgress=0;
   const IMAGE_DURATION=5000;
   const gsap=window.gsap;
   const nextVideo=document.createElement("video");
-  nextVideo.preload="auto";nextVideo.muted=true;nextVideo.playsInline=true;
+  nextVideo.preload="metadata";nextVideo.muted=true;nextVideo.playsInline=true;
   function active(){return highlights[groupIndex]}
   function clearImageTimer(){if(imageTimer){window.clearInterval(imageTimer);imageTimer=0;}imageStartedAt=0;}
   function fillProgress(){
@@ -982,31 +987,36 @@
     dateLabel.textContent=item.date;viewer.setAttribute("aria-label",active().title+" story");
     drawProgress();warmNext();
     if(item.type==="image"){
+      loading.hidden=true;
       video.pause();video.removeAttribute("src");video.load();video.hidden=true;
       storyImage.hidden=false;storyImage.onload=startImageProgress;storyImage.src=item.src;
       if(storyImage.complete)startImageProgress();
       if(gsap)gsap.fromTo(storyImage,{autoAlpha:.68,scale:1.015},{autoAlpha:1,scale:1,duration:.3,ease:"power2.out",overwrite:true});
       return;
     }
-    storyImage.onload=null;storyImage.hidden=true;storyImage.removeAttribute("src");video.hidden=false;
-    video.pause();video.autoplay=true;video.playsInline=true;video.muted=true;video.preload="auto";video.poster=item.poster||"";video.src=item.src;video.load();
+    storyImage.onload=null;storyImage.hidden=true;storyImage.removeAttribute("src");video.hidden=false;loading.hidden=false;
+    video.pause();video.autoplay=true;video.playsInline=true;video.muted=false;video.preload="auto";video.poster=item.poster||"";video.src=item.src;video.load();
     if(gsap)gsap.fromTo(video,{autoAlpha:.68,scale:1.015},{autoAlpha:1,scale:1,duration:.3,ease:"power2.out",overwrite:true});
     const playback=video.play();
-    if(playback&&typeof playback.catch==="function")playback.catch(()=>{video.muted=true;video.play().catch(()=>{});});
+    if(playback&&typeof playback.catch==="function")playback.catch(()=>{if(!viewer.hidden&&!video.hidden)loading.hidden=false;});
   }
   function openViewer(index){
     groupIndex=index;storyIndex=0;viewer.hidden=false;viewer.setAttribute("aria-hidden","false");
     document.body.classList.add("work-story-open");
-    if(gsap){gsap.killTweensOf([viewer,stage]);gsap.fromTo(viewer,{autoAlpha:0},{autoAlpha:1,duration:.22,ease:"power1.out"});gsap.fromTo(stage,{y:14,scale:.97,autoAlpha:.85},{y:0,scale:1,autoAlpha:1,duration:.38,ease:"power3.out",overwrite:true});}
+    if(gsap){gsap.killTweensOf([viewer,stage]);gsap.fromTo(viewer,{opacity:0},{opacity:1,duration:.22,ease:"power1.out"});gsap.fromTo(stage,{y:14,scale:.97,autoAlpha:.85},{y:0,scale:1,autoAlpha:1,duration:.38,ease:"power3.out",overwrite:true});}
     showStory(0);
   }
   function closeViewer(){
     if(viewer.hidden)return;
     clearImageTimer();
-    const finish=()=>{video.pause();video.removeAttribute("src");video.load();storyImage.onload=null;storyImage.removeAttribute("src");storyImage.hidden=true;video.hidden=false;nextVideo.removeAttribute("src");nextVideo.load();viewer.hidden=true;viewer.setAttribute("aria-hidden","true");document.body.classList.remove("work-story-open");};
+    const finish=()=>{video.pause();video.removeAttribute("src");video.load();storyImage.onload=null;storyImage.removeAttribute("src");storyImage.hidden=true;video.hidden=false;loading.hidden=true;nextVideo.removeAttribute("src");nextVideo.load();viewer.hidden=true;viewer.setAttribute("aria-hidden","true");document.body.classList.remove("work-story-open");};
     if(gsap)gsap.to(viewer,{autoAlpha:0,duration:.2,ease:"power1.in",onComplete:finish});else finish();
   }
   video.addEventListener("timeupdate",fillProgress);
+  video.addEventListener("playing",()=>{loading.hidden=true;});
+  video.addEventListener("waiting",()=>{if(!viewer.hidden&&!video.hidden)loading.hidden=false;});
+  video.addEventListener("stalled",()=>{if(!viewer.hidden&&!video.hidden)loading.hidden=false;});
+  video.addEventListener("error",()=>{loading.hidden=true;});
   video.addEventListener("ended",()=>showStory(storyIndex+1));
   document.querySelectorAll(".work-story-card[data-story-highlight]").forEach(button=>button.addEventListener("click",()=>openViewer(Number(button.dataset.storyHighlight))));
   viewer.querySelector(".work-story-close").addEventListener("click",closeViewer);
